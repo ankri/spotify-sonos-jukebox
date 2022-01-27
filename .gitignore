@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.vscode
 
 # testing
 /coverage
@@ -35,3 +36,12 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# config and database files
+config/config.json
+database/database/music.json
+database/database/audiobooks.json
+database/database/tracks.json
+
+# scripts to automatically copy code and database files
+copy-*.sh

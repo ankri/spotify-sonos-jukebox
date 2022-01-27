@@ -1,0 +1,20 @@
+{
+  "api": {
+    "url": "http://localhost:5005",
+    "room": "Living Room"
+  },
+  "spotify": {
+    "clientId": "",
+    "clientSecret": ""
+  },
+  "tts": {
+    "locale": "de-de"
+  },
+  "volumes": {
+    "preset-0": 10,
+    "preset-1": 20,
+    "preset-2": 30,
+    "preset-3": 40,
+    "preset-4": 50
+  }
+}

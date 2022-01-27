@@ -1,0 +1,35 @@
+import classNames from "classnames";
+import * as React from "react";
+import { MdArrowBack } from "react-icons/md";
+import { Button } from "./Button";
+import { TextToSpeechHeading } from "./TextToSpeechHeading";
+
+export const Navbar: React.FC<{ className?: string }> = ({
+  children,
+  className,
+}) => {
+  return (
+    <div
+      className={classNames(
+        "bg-slate-700 p-2 shadow-lg flex flex-row space-x-4 items-center",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const Navigation: React.FC<{
+  title: string;
+  onBackClick: () => void;
+}> = ({ title, onBackClick }) => {
+  return (
+    <Navbar>
+      <Button onClick={onBackClick}>
+        <MdArrowBack className="w-8 h-8 text-slate-300" />
+      </Button>
+      <TextToSpeechHeading className="text-2xl" text={title} />
+    </Navbar>
+  );
+};
