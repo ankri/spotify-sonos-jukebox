@@ -9,7 +9,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { MiniControls } from "@components/controls/MiniControls";
 import { SonosState } from "@custom-types/Sonos";
 import * as SonosApi from "@sonos/api";
-import useSWR from "swr";
 import { TextToSpeechHeading } from "@components/TextToSpeechHeading";
 import { CoverArt } from "@components/CoverArt";
 import { CurrentlyPlaying } from "@components/CurrentlyPlaying";
@@ -20,11 +19,13 @@ const SingleAlbumPage: NextPage<{
   album: Collection;
   playingState: SonosState;
   selectedTrackNumber: number;
-}> = ({ tracks, album, playingState, selectedTrackNumber }) => {
+}> = ({
+  tracks,
+  album,
+  playingState: initialPlayingState,
+  selectedTrackNumber,
+}) => {
   const Router = useRouter();
-  const { data } = useSWR<SonosState>("/api/state", {
-    fallbackData: playingState,
-  });
 
   return (
     <RootLayout>
@@ -70,15 +71,8 @@ const SingleAlbumPage: NextPage<{
           </Swiper>
         </div>
         <div className="flex flex-row justify-between p-4">
-          {data === undefined ? null : (
-            <>
-              <CurrentlyPlaying
-                mediaUri={data.currentTrack.trackUri}
-                title={data.currentTrack.title}
-              />
-              <MiniControls playbackState={data.playbackState} />
-            </>
-          )}
+          <CurrentlyPlaying playbackState={initialPlayingState} />
+          <MiniControls playbackState={initialPlayingState} />
         </div>
       </>
     </RootLayout>

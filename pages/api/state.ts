@@ -10,7 +10,7 @@ export default async function handler(
 ) {
   const data = await SonosApi.getState();
   if (
-    data.currentTrack.title.startsWith("google-") &&
+    data.currentTrack.title.includes("google-") &&
     data.currentTrack.title.endsWith(".mp3")
   ) {
     if (previousState !== null) {

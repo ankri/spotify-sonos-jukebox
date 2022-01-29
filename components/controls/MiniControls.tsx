@@ -5,47 +5,58 @@ import {
   IoPlaySkipBack,
   IoPlaySkipForward,
 } from "react-icons/io5";
-import { PlaybackState } from "@custom-types/Sonos";
+import { SonosState } from "@custom-types/Sonos";
 import { Button } from "../Button";
+import useSWR from "swr";
 
 export const MiniControls: React.FC<{
-  playbackState: PlaybackState;
+  playbackState?: SonosState;
 }> = ({ playbackState }) => {
-  return (
-    <div className="flex flex-row justify-between space-x-4">
-      <Button
-        onClick={() => {
-          fetch("/api/playback/previous");
-        }}
-      >
-        <IoPlaySkipBack className="w-14 h-14 text-slate-300" />
-      </Button>
-      {playbackState === "PAUSED_PLAYBACK" || playbackState === "STOPPED" ? (
+  const { data } = useSWR<SonosState>("/api/state", {
+    fallbackData: playbackState,
+  });
+
+  if (!data) {
+    return null;
+  } else {
+    return (
+      <div className="flex flex-row justify-between space-x-4">
         <Button
           onClick={() => {
-            fetch("/api/playback/play");
+            fetch("/api/playback/previous");
           }}
-          className="bg-slate-800"
         >
-          <IoPlay className="w-14 h-14 text-white" />
+          <IoPlaySkipBack className="w-14 h-14 text-slate-300" />
         </Button>
-      ) : null}
-      {playbackState === "PLAYING" || playbackState === "TRANSITIONING" ? (
+        {data.playbackState === "PAUSED_PLAYBACK" ||
+        data.playbackState === "STOPPED" ? (
+          <Button
+            onClick={() => {
+              fetch("/api/playback/play");
+            }}
+            className="bg-slate-800"
+          >
+            <IoPlay className="w-14 h-14 text-white" />
+          </Button>
+        ) : null}
+        {data.playbackState === "PLAYING" ||
+        data.playbackState === "TRANSITIONING" ? (
+          <Button
+            onClick={() => {
+              fetch("/api/playback/pause");
+            }}
+          >
+            <IoPause className="w-14 h-14 text-slate-300" />
+          </Button>
+        ) : null}
         <Button
           onClick={() => {
-            fetch("/api/playback/pause");
+            fetch("/api/playback/next");
           }}
         >
-          <IoPause className="w-14 h-14 text-slate-300" />
+          <IoPlaySkipForward className="w-14 h-14 text-slate-300" />
         </Button>
-      ) : null}
-      <Button
-        onClick={() => {
-          fetch("/api/playback/next");
-        }}
-      >
-        <IoPlaySkipForward className="w-14 h-14 text-slate-300" />
-      </Button>
-    </div>
-  );
+      </div>
+    );
+  }
 };
