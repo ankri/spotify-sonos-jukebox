@@ -13,6 +13,7 @@ import { BsMusicNoteBeamed } from "react-icons/bs";
 import { MdOutlineMenuBook, MdFavorite } from "react-icons/md";
 import classNames from "classnames";
 import { Collection } from "@custom-types/Collection";
+import { HomepageNavigation } from "@components/HomepageNavigation";
 
 const Home: NextPage<{ music: Collection[]; audiobooks: Collection[] }> = ({
   music,
@@ -46,34 +47,7 @@ const Home: NextPage<{ music: Collection[]; audiobooks: Collection[] }> = ({
   return (
     <RootLayout>
       <>
-        <Navbar className="justify-center">
-          <Button
-            onClick={() => {}}
-            className={classNames("hover:!bg-pink-700")}
-          >
-            <MdFavorite className="w-8 h-8 text-slate-300" />
-          </Button>
-          <Button
-            onClick={() => {
-              setSelectedFilter("music");
-            }}
-            className={classNames("hover:!bg-amber-700", {
-              "!bg-amber-900": selectedFilter === "music",
-            })}
-          >
-            <BsMusicNoteBeamed className="w-8 h-8 text-slate-300" />
-          </Button>
-          <Button
-            onClick={() => {
-              setSelectedFilter("audiobooks");
-            }}
-            className={classNames("hover:!bg-teal-700", {
-              "!bg-teal-900": selectedFilter === "audiobooks",
-            })}
-          >
-            <MdOutlineMenuBook className="w-8 h-8 text-slate-300" />
-          </Button>
-        </Navbar>
+        <HomepageNavigation />
         <div className="w-full flex flex-grow items-center p-4">
           <Swiper slidesPerView={slidesPerView} spaceBetween={50}>
             {selectedCollections.map((collection) => {

@@ -41,6 +41,7 @@ yarn-error.log*
 config/config.json
 database/database/music.json
 database/database/audiobooks.json
+database/database/stories.json
 database/database/tracks.json
 
 # scripts to automatically copy code and database files

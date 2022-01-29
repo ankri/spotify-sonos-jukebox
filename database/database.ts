@@ -5,9 +5,11 @@ import * as fs from "fs";
 import initialTracks from "./database/tracks.json";
 import initialMusicCollection from "./database/music.json";
 import initialAudiobooks from "./database/audiobooks.json";
+import initialStories from "./database/stories.json";
 
 const musicCollection: Collection[] = initialMusicCollection;
 const audiobooks: Collection[] = initialAudiobooks;
+const stories: Collection[] = initialStories;
 const tracks: Track[] = initialTracks;
 
 export const getTrackInfo = (mediaUri: string): Track | undefined => {
@@ -30,4 +32,8 @@ export const getMusicCollection = () => {
 
 export const getAllAudiobooks = () => {
   return audiobooks;
+};
+
+export const getAllStories = () => {
+  return stories;
 };
