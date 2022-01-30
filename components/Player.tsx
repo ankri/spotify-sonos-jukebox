@@ -8,7 +8,6 @@ import { TextToSpeechHeading } from "./TextToSpeechHeading";
 
 export const Player: React.FC<{
   sonosState: SonosState;
-  albumName: string;
 }> = ({ sonosState: initialSonosState }) => {
   const { data } = useSWR<SonosState>("/api/state", {
     fallbackData: initialSonosState,
@@ -29,7 +28,7 @@ export const Player: React.FC<{
           <div className="flex flex-col justify-between flex-grow">
             <div className="flex flex-col space-y-4 p-4">
               <TextToSpeechHeading
-                className="text-4xl text-center font-semibold"
+                className="text-4xl text-center font-semibold line-clamp-3"
                 text={data.currentTrack.title}
               />
               <TextToSpeechHeading

@@ -13,6 +13,15 @@ export const getSpotifyUriFromSonosUri = (uri: string): string | null => {
   }
 };
 
+export const normalizePlaylistUri = (spotifyUri: string) =>
+  spotifyUri.replace("spotify:user:spotify:playlist:", "spotify:playlist:");
+
+export const getPlaylistIdFromSpotifyUri = (spotifyUri: string) =>
+  spotifyUri.replace("spotify:user:spotify:playlist:", "");
+
+export const getSpotifyPlaylistUriFromPlaylistId = (playlistId: string) =>
+  `spotify:user:spotify:playlist:${playlistId}`;
+
 export const getSpotifyAlbumUriFromAlbumId = (albumId: string) =>
   `spotify:album:${albumId}`;
 

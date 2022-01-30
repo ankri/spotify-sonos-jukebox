@@ -21,7 +21,7 @@ export const Navbar: React.FC<{ className?: string }> = ({
 };
 
 export const Navigation: React.FC<{
-  title: string;
+  title?: string;
   onBackClick: () => void;
 }> = ({ title, onBackClick }) => {
   return (
@@ -29,7 +29,7 @@ export const Navigation: React.FC<{
       <Button onClick={onBackClick}>
         <MdArrowBack className="w-8 h-8 text-slate-300" />
       </Button>
-      <TextToSpeechHeading className="text-2xl" text={title} />
+      {title ? <TextToSpeechHeading className="text-2xl" text={title} /> : null}
     </Navbar>
   );
 };

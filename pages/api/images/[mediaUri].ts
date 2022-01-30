@@ -1,5 +1,6 @@
 import * as Database from "@database/database";
 import * as SpotifyApi from "@spotify/api";
+import * as Converter from "@spotify/converter";
 import { imageCache } from "@cache/cache";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -10,7 +11,8 @@ export default async function handler(
   const mediaUri = req.query.mediaUri;
 
   if (mediaUri && typeof mediaUri === "string") {
-    const [source, type, id] = mediaUri.split(":");
+    const [source, type, id] =
+      Converter.normalizePlaylistUri(mediaUri).split(":");
 
     if (imageCache.has(mediaUri)) {
       res.redirect(302, imageCache.get(mediaUri)!);
@@ -36,6 +38,15 @@ export default async function handler(
           } else {
             const albumInfo = await SpotifyApi.getAlbumInfo(id);
             imageUrl = albumInfo.images[0].url;
+          }
+          break;
+        case "playlist":
+          const playlistInfo = Database.getMusicInfo(mediaUri);
+          if (playlistInfo && playlistInfo.imageUrl) {
+            imageUrl = playlistInfo.imageUrl;
+          } else {
+            const playlistInfo = await SpotifyApi.getPlaylistInfo(id);
+            imageUrl = playlistInfo.images[0].url;
           }
           break;
         default:

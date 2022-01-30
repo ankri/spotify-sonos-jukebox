@@ -7,12 +7,18 @@ import * as React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { RootLayout } from "./RootLayout";
 import { TextToSpeechHeading } from "@components/TextToSpeechHeading";
+import { CurrentlyPlaying } from "@components/CurrentlyPlaying";
+import { MiniControls } from "@components/controls/MiniControls";
+import { SonosState } from "@custom-types/Sonos";
+import { usePlayer } from "@hooks/usePlayer";
 
 export const CollectionHomepageLayout: React.FC<{
   collections: Collection[];
-}> = ({ collections }) => {
+  initialPlayingState: SonosState;
+}> = ({ collections, initialPlayingState }) => {
   const Router = useRouter();
 
+  const playCollection = usePlayer();
   const slidesPerView = React.useMemo(() => {
     if (collections.length < 3) {
       return collections.length;
@@ -36,20 +42,11 @@ export const CollectionHomepageLayout: React.FC<{
                       mediaUri={collection.mediaUri}
                       size="md"
                       onClick={() => {
-                        if (collection.mediaUri.includes(":album:")) {
-                          Router.push(
-                            `/album/${Converter.getAlbumIdFromSpotifyUri(
-                              collection.mediaUri
-                            )}`
-                          );
-                        } else {
-                          // TODO
-                          console.log(`${collection.mediaUri} not supported`);
-                        }
+                        playCollection(collection.mediaUri);
                       }}
                     />
                     <TextToSpeechHeading
-                      className="text-2xl text-center"
+                      className="text-lg text-center line-clamp-2"
                       text={collection.name}
                     />
                   </div>
@@ -57,6 +54,10 @@ export const CollectionHomepageLayout: React.FC<{
               );
             })}
           </Swiper>
+        </div>
+        <div className="flex flex-row justify-between p-2">
+          <CurrentlyPlaying playbackState={initialPlayingState} />
+          <MiniControls playbackState={initialPlayingState} />
         </div>
       </>
     </RootLayout>

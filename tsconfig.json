@@ -21,6 +21,7 @@
       "@config/*": ["./config/*"],
       "@custom-types/*": ["./types/*"],
       "@database/*": ["./database/*"],
+      "@hooks/*": ["./hooks/*"],
       "@layouts/*": ["./layouts/*"],
       "@sonos/*": ["./sonos/*"],
       "@spotify/*": ["./spotify/*"],

@@ -57,12 +57,31 @@ export const setVolume = async (
 };
 
 export const playAlbum = async (albumId: string, trackNumber?: string) => {
-  const albumUri = `spotify:album:${albumId}`;
+  const albumUri = Converter.getSpotifyAlbumUriFromAlbumId(albumId);
 
   console.log(`playing album: ${albumUri} ${trackNumber}`);
 
   await fetch(`${config.api.url}/${config.api.room}/clearqueue`);
   await fetch(`${config.api.url}/${config.api.room}/spotify/now/${albumUri}`);
+  if (trackNumber && parseInt(trackNumber) > 1) {
+    await fetch(
+      `${config.api.url}/${config.api.room}/trackseek/${trackNumber}`
+    );
+  }
+};
+
+export const playPlaylist = async (
+  playlistId: string,
+  trackNumber?: string
+) => {
+  const playlistUri = Converter.getSpotifyPlaylistUriFromPlaylistId(playlistId);
+
+  console.log(`playing playlist: ${playlistUri} ${trackNumber}`);
+
+  await fetch(`${config.api.url}/${config.api.room}/clearqueue`);
+  await fetch(
+    `${config.api.url}/${config.api.room}/spotify/now/${playlistUri}`
+  );
   if (trackNumber && parseInt(trackNumber) > 1) {
     await fetch(
       `${config.api.url}/${config.api.room}/trackseek/${trackNumber}`

@@ -21,7 +21,7 @@ export const getMusicInfo = (mediaUri: string): Collection | undefined => {
 };
 
 export const getCollectionInfo = (mediaUri: string): Collection | undefined => {
-  return [...musicCollection, ...audiobooks].find(
+  return [...musicCollection, ...audiobooks, ...stories].find(
     (collection) => collection.mediaUri === mediaUri
   );
 };

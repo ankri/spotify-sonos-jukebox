@@ -26,7 +26,7 @@ export const CurrentlyPlaying: React.FC<{
         <button
           className="flex flex-row space-x-4 items-center"
           onClick={() => {
-            Router.push(`${Router.asPath}/player`);
+            Router.push("/player");
           }}
         >
           <CoverArt
@@ -35,7 +35,7 @@ export const CurrentlyPlaying: React.FC<{
             size="sm"
           />
           <h1
-            className="text-2xl tracking-wider"
+            className="text-2xl tracking-wider line-clamp-1"
             style={{ fontVariant: "small-caps" }}
           >
             {data.currentTrack.title}
