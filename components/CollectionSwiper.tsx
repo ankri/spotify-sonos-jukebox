@@ -42,7 +42,7 @@ export const CollectionSwiper: React.FC<{
                   alt={track.name}
                   mediaUri={Converter.getSpotifyTrackUriFromId(track.id)}
                   onClick={async () => {
-                    if (collectionType === "playlist") {
+                    if (collectionMediaUri.includes(":playlist:")) {
                       const playlistId =
                         Converter.getPlaylistIdFromSpotifyUri(
                           collectionMediaUri
@@ -50,11 +50,12 @@ export const CollectionSwiper: React.FC<{
                       await fetch(
                         `/api/playlist/${playlistId}/track/${index + 1}`
                       );
-                    } else if (collectionType === "album") {
+                    } else if (collectionMediaUri.includes(":album:")) {
                       const albumId =
                         Converter.getAlbumIdFromSpotifyUri(collectionMediaUri);
                       await fetch(`/api/album/${albumId}/track/${index + 1}`);
                     }
+
                     Router.push("/player");
                   }}
                 />
