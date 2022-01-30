@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import * as Converter from "@spotify/converter";
 import React from "react";
 
-export const usePlayer = () => {
+export const usePlayCollection = () => {
   const Router = useRouter();
   const path = Router.asPath;
 

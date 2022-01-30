@@ -1,8 +1,6 @@
 import { CoverArt } from "@components/CoverArt";
 import { HomepageNavigation } from "@components/HomepageNavigation";
 import { Collection } from "@custom-types/Collection";
-import { useRouter } from "next/router";
-import * as Converter from "@spotify/converter";
 import * as React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { RootLayout } from "./RootLayout";
@@ -10,15 +8,13 @@ import { TextToSpeechHeading } from "@components/TextToSpeechHeading";
 import { CurrentlyPlaying } from "@components/CurrentlyPlaying";
 import { MiniControls } from "@components/controls/MiniControls";
 import { SonosState } from "@custom-types/Sonos";
-import { usePlayer } from "@hooks/usePlayer";
+import { usePlayCollection } from "@hooks/usePlayCollection";
 
 export const CollectionHomepageLayout: React.FC<{
   collections: Collection[];
   initialPlayingState: SonosState;
 }> = ({ collections, initialPlayingState }) => {
-  const Router = useRouter();
-
-  const playCollection = usePlayer();
+  const playCollection = usePlayCollection();
   const slidesPerView = React.useMemo(() => {
     if (collections.length < 3) {
       return collections.length;
@@ -41,8 +37,8 @@ export const CollectionHomepageLayout: React.FC<{
                       alt={collection.name}
                       mediaUri={collection.mediaUri}
                       size="md"
-                      onClick={() => {
-                        playCollection(collection.mediaUri);
+                      onClick={async () => {
+                        await playCollection(collection.mediaUri);
                       }}
                     />
                     <TextToSpeechHeading
