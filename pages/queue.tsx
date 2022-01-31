@@ -41,10 +41,8 @@ const QueuePage: NextPage<{
   }, [queue]);
 
   React.useEffect(() => {
-    if (data) {
-      if (swiperRef.current) {
-        swiperRef.current.slideTo(currentTrackIndex - 1);
-      }
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(currentTrackIndex - 1);
     }
   }, [currentTrackIndex]);
 
