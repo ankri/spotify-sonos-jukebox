@@ -16,6 +16,11 @@ export interface SonosTrack {
   uri: string;
 }
 
+export type SimpleSonosTrack = Pick<
+  SonosTrack,
+  "album" | "absoluteAlbumArtUri" | "artist" | "title" | "uri"
+>;
+
 export interface SonosState {
   currentTrack: SonosTrack;
   elapsedTime: number;

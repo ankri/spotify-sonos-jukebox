@@ -1,6 +1,6 @@
 import config from "@config/config.json";
 import * as Converter from "@spotify/converter";
-import { SonosState } from "@custom-types/Sonos";
+import { SimpleSonosTrack, SonosState } from "@custom-types/Sonos";
 
 export type AvailableCommands = "play" | "pause" | "next" | "previous";
 export const availableCommands: Set<AvailableCommands> = new Set();
@@ -89,6 +89,10 @@ export const playPlaylist = async (
   }
 };
 
+export const playTrack = async (trackNumber: number) => {
+  await fetch(`${config.api.url}/${config.api.room}/trackseek/${trackNumber}`);
+};
+
 export const getState = async (): Promise<SonosState> => {
   const response = await fetch(`${config.api.url}/${config.api.room}/state`);
   const data: SonosState = await response.json();
@@ -116,4 +120,16 @@ export const textToSpeech = async (text: string): Promise<void> => {
   await fetch(
     `${config.api.url}/${config.api.room}/say/${text}/${config.tts.locale}/${config.volumes["preset-2"]}`
   );
+};
+
+export const getQueue = async (): Promise<SimpleSonosTrack[]> => {
+  const response = await fetch(
+    `${config.api.url}/${config.api.room}/queue/detailed`
+  );
+  const queue = (await response.json()) as SimpleSonosTrack[];
+
+  return queue.map((track) => ({
+    ...track,
+    uri: Converter.getSpotifyUriFromSonosUri(track.uri) ?? "unknown",
+  }));
 };

@@ -5,6 +5,8 @@ import { Player } from "@components/Player";
 import { RootLayout } from "@layouts/RootLayout";
 import { Navigation } from "@components/Navigation";
 import { useRouter } from "next/router";
+import { Button } from "@components/Button";
+import { HiOutlineMenu } from "react-icons/hi";
 
 const NowPlayingPage: NextPage<{
   sonosState: SonosState;
@@ -14,10 +16,19 @@ const NowPlayingPage: NextPage<{
   return (
     <RootLayout>
       <Navigation
+        className="justify-between"
         onBackClick={() => {
           Router.back();
         }}
-      />
+      >
+        <Button
+          onClick={() => {
+            Router.replace("/queue");
+          }}
+        >
+          <HiOutlineMenu className="w-8 h-8 rotate-90 text-white"></HiOutlineMenu>
+        </Button>
+      </Navigation>
       <Player sonosState={initialSonosState} />
     </RootLayout>
   );

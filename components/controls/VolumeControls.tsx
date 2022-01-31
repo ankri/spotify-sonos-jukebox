@@ -14,7 +14,7 @@ const setVolume = async (volumePreset: keyof typeof config.volumes) => {
 
 export const VolumeControls: React.FC = () => {
   return (
-    <div className="flex flex-row justify-between">
+    <div className="flex flex-row justify-between space-x-2">
       <Button
         onClick={() => {
           setVolume("preset-0");

@@ -23,13 +23,15 @@ export const Navbar: React.FC<{ className?: string }> = ({
 export const Navigation: React.FC<{
   title?: string;
   onBackClick: () => void;
-}> = ({ title, onBackClick }) => {
+  className?: string;
+}> = ({ className, title, onBackClick, children }) => {
   return (
-    <Navbar>
+    <Navbar className={className}>
       <Button onClick={onBackClick}>
         <MdArrowBack className="w-8 h-8 text-slate-300" />
       </Button>
       {title ? <TextToSpeechHeading className="text-2xl" text={title} /> : null}
+      {children}
     </Navbar>
   );
 };
