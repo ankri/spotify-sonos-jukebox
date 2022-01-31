@@ -5,7 +5,7 @@ import {
   MdSignalCellular3Bar,
   MdSignalCellular4Bar,
 } from "react-icons/md";
-import config from "@config/config.json";
+import { config } from "@config/config";
 import { Button } from "../Button";
 
 const setVolume = async (volumePreset: keyof typeof config.volumes) => {

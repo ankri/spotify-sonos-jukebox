@@ -1,5 +1,5 @@
 import SpotifyWebApi from "spotify-web-api-node";
-import config from "@config/config.json";
+import { config } from "@config/config";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: config.spotify.clientId,

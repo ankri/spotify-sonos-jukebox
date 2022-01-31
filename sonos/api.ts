@@ -1,4 +1,4 @@
-import config from "@config/config.json";
+import { config } from "@config/config";
 import * as Converter from "@spotify/converter";
 import { SimpleSonosTrack, SonosState } from "@custom-types/Sonos";
 
@@ -40,7 +40,11 @@ availableVolumePresets.add("preset-4");
 export const setVolume = async (
   volumePreset: AvailableVolumePresets
 ): Promise<void> => {
-  const volume = config.volumes[volumePreset] ?? 25;
+  // only allow positive (incl. 0 but wwyd that?) integers
+  let volume = Math.floor(Math.abs(config.volumes[volumePreset])) ?? 25;
+  if (volume > 100) {
+    volume = 100;
+  }
 
   const response = await fetch(
     `${config.api.url}/${config.api.room}/volume/${volume}`
@@ -59,10 +63,12 @@ export const setVolume = async (
 export const playAlbum = async (albumId: string, trackNumber?: string) => {
   const albumUri = Converter.getSpotifyAlbumUriFromAlbumId(albumId);
 
-  console.log(`playing album: ${albumUri} ${trackNumber}`);
+  console.log(`playing album: ${albumUri} track #${trackNumber}`);
 
   await fetch(`${config.api.url}/${config.api.room}/clearqueue`);
   await fetch(`${config.api.url}/${config.api.room}/spotify/now/${albumUri}`);
+  // there is a bug trying to directly seek the first track after choosing an album/playlist.
+  // but it plays automatically anyways so we can just skip the call
   if (trackNumber && parseInt(trackNumber) > 1) {
     await fetch(
       `${config.api.url}/${config.api.room}/trackseek/${trackNumber}`

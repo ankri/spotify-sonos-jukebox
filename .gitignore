@@ -38,6 +38,7 @@ yarn-error.log*
 *.tsbuildinfo
 
 # config and database files
+config/config.ts
 config/config.json
 database/database/music.json
 database/database/audiobooks.json
