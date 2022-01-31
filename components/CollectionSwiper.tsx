@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { CoverArt } from "./CoverArt";
 import { TextToSpeechHeading } from "./TextToSpeechHeading";
 import { useRouter } from "next/router";
+import { config } from "@config/config";
 
 interface Track {
   id: string;
@@ -16,7 +17,6 @@ export const CollectionSwiper: React.FC<{
   selectedTrackNumber?: number;
 }> = ({ tracks, selectedTrackNumber, collectionMediaUri }) => {
   const Router = useRouter();
-  const collectionType = Router.query.collection;
 
   const slidesPerView = React.useMemo(() => {
     if (tracks.length < 3) {
@@ -42,6 +42,7 @@ export const CollectionSwiper: React.FC<{
                   alt={track.name}
                   mediaUri={Converter.getSpotifyTrackUriFromId(track.id)}
                   onClick={async () => {
+                    // TODO find a way to re-use the usePlayCollection hook here
                     if (collectionMediaUri.includes(":playlist:")) {
                       const playlistId =
                         Converter.getPlaylistIdFromSpotifyUri(
@@ -56,7 +57,7 @@ export const CollectionSwiper: React.FC<{
                       await fetch(`/api/album/${albumId}/track/${index + 1}`);
                     }
 
-                    Router.push("/player");
+                    Router.push(`/${config.ui.defaultPlayer}`);
                   }}
                 />
                 <TextToSpeechHeading

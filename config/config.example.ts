@@ -6,7 +6,7 @@ export const config: Config = {
     room: "Living Room",
   },
   ui: {
-    defaultPlayer: "player", // or cover
+    defaultPlayer: "player", // or queue
   },
   spotify: {
     // create your spotify developer account here: https://developer.spotify.com/dashboard/applications

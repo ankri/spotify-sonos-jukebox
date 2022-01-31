@@ -4,7 +4,7 @@ export interface Config {
     room: string;
   };
   ui: {
-    defaultPlayer: "player" | "covers";
+    defaultPlayer: "player" | "queue";
   };
   spotify: {
     clientId: string;

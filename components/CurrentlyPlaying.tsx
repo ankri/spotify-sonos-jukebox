@@ -1,3 +1,4 @@
+import { config } from "@config/config";
 import { SonosState } from "@custom-types/Sonos";
 import { useRouter } from "next/router";
 import * as React from "react";
@@ -26,7 +27,7 @@ export const CurrentlyPlaying: React.FC<{
         <button
           className="flex flex-row space-x-4 items-center"
           onClick={() => {
-            Router.push("/player");
+            Router.push(`/${config.ui.defaultPlayer}`);
           }}
         >
           <CoverArt
