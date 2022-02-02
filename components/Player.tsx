@@ -17,15 +17,20 @@ export const Player: React.FC<{
     return <>Loading</>;
   } else {
     return (
-      <div className="p-4 flex items-center w-full flex-grow">
-        <div className="flex flex-row space-x-4 w-full">
-          <CoverArt
-            size="lg"
-            alt={`${data.currentTrack.artist} - ${data.currentTrack.title}`}
-            mediaUri={data.currentTrack.uri}
-            progress={data.elapsedTime / data.currentTrack.duration}
-          />
-          <div className="flex flex-col justify-between flex-grow">
+      <div
+        className="p-4 flex items-center w-full flex-grow justify-between"
+        style={{ height: "calc(100vh - 72px)" }}
+      >
+        <div className="flex flex-col md:flex-row md:space-x-4 w-full h-full">
+          <div className="flex items-center justify-center">
+            <CoverArt
+              size="lg"
+              alt={`${data.currentTrack.artist} - ${data.currentTrack.title}`}
+              mediaUri={data.currentTrack.uri}
+              progress={data.elapsedTime / data.currentTrack.duration}
+            />
+          </div>
+          <div className="flex flex-col justify-between md:justify-center flex-grow">
             <div className="flex flex-col space-y-4 p-4">
               <TextToSpeechHeading
                 className="text-4xl text-center font-semibold line-clamp-3"
@@ -36,9 +41,11 @@ export const Player: React.FC<{
                 text={data.currentTrack.artist}
               />
             </div>
-            <div className="flex flex-col space-y-4">
-              <Controls playbackState={data.playbackState} />
-              <VolumeControls />
+            <div className="flex items-center justify-center">
+              <div className="flex flex-col space-y-4">
+                <Controls playbackState={data.playbackState} />
+                <VolumeControls />
+              </div>
             </div>
           </div>
         </div>

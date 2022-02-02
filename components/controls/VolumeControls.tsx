@@ -17,7 +17,7 @@ export const VolumeControls: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-row justify-between space-x-2">
+    <div className="flex flex-row space-x-4">
       <Button
         onClick={() => {
           setVolume("preset-0");

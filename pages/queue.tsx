@@ -32,11 +32,13 @@ const QueuePage: NextPage<{
       return 0;
     }
   }, [data, queue]);
-  const slidesPerView = React.useMemo(() => {
-    if (queue.length < 3) {
-      return queue.length;
+  const [slidesPerView, setSlidesPerView] = React.useState(1);
+  React.useEffect(() => {
+    const maxSlides = Math.floor(document.body.clientWidth / 224);
+    if (queue.length < maxSlides) {
+      setSlidesPerView(queue.length);
     } else {
-      return 3;
+      setSlidesPerView(maxSlides);
     }
   }, [queue]);
 
@@ -66,74 +68,81 @@ const QueuePage: NextPage<{
               <BsCollectionPlay className="w-8 h-8 text-white" />
             </Button>
           </Navigation>
-          <div className="w-full flex flex-grow items-center p-4">
-            <ReactSwiper
-              slidesPerView={slidesPerView}
-              spaceBetween={50}
-              onSwiper={(swiper) => {
-                swiperRef.current = swiper;
-              }}
-            >
-              {queue.map((track, index) => {
-                return (
-                  <SwiperSlide key={track.uri}>
-                    <div className="flex flex-col items-center space-y-4">
-                      <div className="relative">
-                        <CoverArt
-                          alt={track.title}
-                          mediaUri={track.uri}
-                          size="md"
-                          onClick={async () => {
-                            if (currentTrackIndex !== index) {
-                              await fetch(`/api/playback/seek/${index + 1}`);
+          <div
+            className="flex flex-col justify-between"
+            style={{ height: "calc(100vh - 72px)" }}
+          >
+            <div className="w-full flex flex-grow items-center px-4 py-2">
+              <ReactSwiper
+                slidesPerView={slidesPerView}
+                spaceBetween={50}
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                }}
+              >
+                {queue.map((track, index) => {
+                  return (
+                    <SwiperSlide key={track.uri}>
+                      <div className="flex flex-col items-center space-y-4">
+                        <div className="relative">
+                          <CoverArt
+                            alt={track.title}
+                            mediaUri={track.uri}
+                            size="md"
+                            onClick={async () => {
+                              if (currentTrackIndex !== index) {
+                                await fetch(`/api/playback/seek/${index + 1}`);
+                              }
+                            }}
+                            progress={
+                              currentTrackIndex === index
+                                ? data.elapsedTime / data.currentTrack.duration
+                                : undefined
                             }
-                          }}
-                          progress={
-                            currentTrackIndex === index
-                              ? data.elapsedTime / data.currentTrack.duration
-                              : undefined
-                          }
+                          />
+                          {currentTrackIndex === index ? (
+                            <div className="absolute flex w-full h-full items-center justify-center bg-slate-900 bg-opacity-90 top-0">
+                              {data.playbackState === "STOPPED" ||
+                              data.playbackState === "PAUSED_PLAYBACK" ? (
+                                <Button
+                                  size="lg"
+                                  onClick={() => {
+                                    fetch("/api/playback/play");
+                                  }}
+                                >
+                                  <IoPlay className="w-14 h-14 text-white" />
+                                </Button>
+                              ) : null}
+                              {data.playbackState === "PLAYING" ||
+                              data.playbackState === "TRANSITIONING" ? (
+                                <Button
+                                  size="lg"
+                                  onClick={() => {
+                                    fetch("/api/playback/pause");
+                                  }}
+                                >
+                                  <IoPause className="w-14 h-14 text-white" />
+                                </Button>
+                              ) : null}
+                            </div>
+                          ) : null}
+                        </div>
+                        <TextToSpeechHeading
+                          className="text-lg text-center line-clamp-2"
+                          text={track.title}
                         />
-                        {currentTrackIndex === index ? (
-                          <div className="absolute flex w-full h-full items-center justify-center bg-slate-900 bg-opacity-90 top-0">
-                            {data.playbackState === "STOPPED" ||
-                            data.playbackState === "PAUSED_PLAYBACK" ? (
-                              <Button
-                                size="lg"
-                                onClick={() => {
-                                  fetch("/api/playback/play");
-                                }}
-                              >
-                                <IoPlay className="w-14 h-14 text-white" />
-                              </Button>
-                            ) : null}
-                            {data.playbackState === "PLAYING" ||
-                            data.playbackState === "TRANSITIONING" ? (
-                              <Button
-                                size="lg"
-                                onClick={() => {
-                                  fetch("/api/playback/pause");
-                                }}
-                              >
-                                <IoPause className="w-14 h-14 text-white" />
-                              </Button>
-                            ) : null}
-                          </div>
-                        ) : null}
                       </div>
-                      <TextToSpeechHeading
-                        className="text-lg text-center line-clamp-2"
-                        text={track.title}
-                      />
-                    </div>
-                  </SwiperSlide>
-                );
-              })}
-            </ReactSwiper>
-          </div>
-          <div className="flex flex-row justify-between space-x-2 px-4 py-2">
-            <VolumeControls />
-            <MiniControls />
+                    </SwiperSlide>
+                  );
+                })}
+              </ReactSwiper>
+            </div>
+            <div className="flex flex-col md:flex-row items-center justify-center md:justify-between p-2 space-y-4">
+              <VolumeControls />
+              <div className="flex items-center justify-center">
+                <MiniControls playbackState={initialPlayingState} />
+              </div>
+            </div>
           </div>
         </>
       </RootLayout>

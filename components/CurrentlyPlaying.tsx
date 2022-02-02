@@ -25,7 +25,7 @@ export const CurrentlyPlaying: React.FC<{
     } else {
       return (
         <button
-          className="flex flex-row space-x-4 items-center"
+          className="flex flex-row items-center space-x-0 md:space-x-4"
           onClick={() => {
             Router.push(`/${config.ui.defaultPlayer}`);
           }}
@@ -36,7 +36,7 @@ export const CurrentlyPlaying: React.FC<{
             size="sm"
           />
           <h1
-            className="text-2xl tracking-wider line-clamp-1"
+            className="text-2xl tracking-wider md:line-clamp-1 line-clamp-2"
             style={{ fontVariant: "small-caps" }}
           >
             {data.currentTrack.title}

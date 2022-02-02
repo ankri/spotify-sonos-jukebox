@@ -35,14 +35,21 @@ const SingleAlbumPage: NextPage<{
             Router.replace(`/${collection}`);
           }}
         />
-        <CollectionSwiper
-          collectionMediaUri={album.mediaUri}
-          tracks={tracks}
-          selectedTrackNumber={selectedTrackNumber}
-        />
-        <div className="flex flex-row justify-between p-2">
-          <CurrentlyPlaying playbackState={initialPlayingState} />
-          <MiniControls playbackState={initialPlayingState} />
+        <div
+          className="flex flex-col justify-between"
+          style={{ height: "calc(100vh - 72px)" }}
+        >
+          <CollectionSwiper
+            collectionMediaUri={album.mediaUri}
+            tracks={tracks}
+            selectedTrackNumber={selectedTrackNumber}
+          />
+          <div className="flex md:flex-row flex-col justify-between p-2 space-y-4">
+            <CurrentlyPlaying playbackState={initialPlayingState} />
+            <div className="flex items-center justify-center">
+              <MiniControls playbackState={initialPlayingState} />
+            </div>
+          </div>
         </div>
       </>
     </RootLayout>

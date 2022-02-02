@@ -7,10 +7,9 @@ export const RootLayout: React.FC = ({ children }) => {
     <div
       className="flex flex-col"
       style={{
-        width: 800,
-        height: 480,
+        // width: 800,
+        // height: 480,
         overflow: "auto",
-        border: isDev ? "1px solid red" : "none",
       }}
     >
       {children}

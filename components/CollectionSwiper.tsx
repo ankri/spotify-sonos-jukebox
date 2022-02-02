@@ -18,11 +18,13 @@ export const CollectionSwiper: React.FC<{
 }> = ({ tracks, selectedTrackNumber, collectionMediaUri }) => {
   const Router = useRouter();
 
-  const slidesPerView = React.useMemo(() => {
-    if (tracks.length < 3) {
-      return tracks.length;
+  const [slidesPerView, setSlidesPerView] = React.useState(1);
+  React.useEffect(() => {
+    const maxSlides = Math.floor(document.body.clientWidth / 224);
+    if (tracks.length < maxSlides) {
+      setSlidesPerView(tracks.length);
     } else {
-      return 3;
+      setSlidesPerView(maxSlides);
     }
   }, [tracks]);
 

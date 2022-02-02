@@ -30,7 +30,9 @@ export const Navigation: React.FC<{
       <Button onClick={onBackClick}>
         <MdArrowBack className="w-8 h-8 text-slate-300" />
       </Button>
-      {title ? <TextToSpeechHeading className="text-2xl" text={title} /> : null}
+      {title ? (
+        <TextToSpeechHeading className="text-2xl line-clamp-1" text={title} />
+      ) : null}
       {children}
     </Navbar>
   );
