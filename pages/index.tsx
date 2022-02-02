@@ -6,9 +6,8 @@ export const Home: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = async ({}) => {
   return {
-    props: {},
     redirect: {
-      to: "/music",
+      destination: "/music",
       permanent: false,
     },
   };
