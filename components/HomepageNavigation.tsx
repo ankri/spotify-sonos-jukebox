@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import classNames from "classnames";
 import * as React from "react";
 import { BsMusicNoteBeamed } from "react-icons/bs";
-import { MdOutlineMenuBook, MdFavorite, MdSchool } from "react-icons/md";
+import { MdOutlineMenuBook, MdSchool } from "react-icons/md";
 import { LinkButton } from "./LinkButton";
 import { Navbar } from "./Navigation";
 
@@ -11,14 +11,6 @@ export const HomepageNavigation: React.FC = ({}) => {
 
   return (
     <Navbar className="justify-center">
-      <LinkButton
-        href="/"
-        className={classNames("hover:!bg-pink-700", {
-          "!bg-pink-700": asPath === "/",
-        })}
-      >
-        <MdFavorite className="w-8 h-8 text-slate-300" />
-      </LinkButton>
       <LinkButton
         href="/music"
         className={classNames("hover:!bg-amber-700", {

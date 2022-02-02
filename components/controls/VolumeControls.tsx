@@ -8,11 +8,14 @@ import {
 import { config } from "@config/config";
 import { Button } from "../Button";
 
-const setVolume = async (volumePreset: keyof typeof config.volumes) => {
-  return fetch(`/api/playback/volume/${volumePreset}`);
-};
-
 export const VolumeControls: React.FC = () => {
+  const setVolume = React.useCallback(
+    async (volumePreset: keyof typeof config.volumes) => {
+      return fetch(`/api/playback/volume/${volumePreset}`);
+    },
+    []
+  );
+
   return (
     <div className="flex flex-row justify-between space-x-2">
       <Button
