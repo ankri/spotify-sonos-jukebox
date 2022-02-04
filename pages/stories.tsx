@@ -8,12 +8,12 @@ import { SonosState } from "@custom-types/Sonos";
 
 const StoriesHomepage: NextPage<{
   stories: Collection[];
-  playingState: SonosState;
-}> = ({ stories, playingState: initialPlayingState }) => {
+  sonosState: SonosState;
+}> = ({ stories, sonosState: initialSonosState }) => {
   return (
     <CollectionHomepageLayout
       collections={stories}
-      initialPlayingState={initialPlayingState}
+      sonosState={initialSonosState}
     />
   );
 };
@@ -22,12 +22,12 @@ export default StoriesHomepage;
 
 export const getServerSideProps: GetServerSideProps = async ({}) => {
   const stories = await Database.getAllStories();
-  const playingState = await SonosApi.getState();
+  const sonosState = await SonosApi.getState();
 
   return {
     props: {
       stories,
-      playingState,
+      sonosState,
     },
   };
 };

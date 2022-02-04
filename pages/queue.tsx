@@ -15,15 +15,16 @@ import { IoPause, IoPlay } from "react-icons/io5";
 import { BsCollectionPlay } from "react-icons/bs";
 import { VolumeControls } from "@components/controls/VolumeControls";
 import { MiniControls } from "@components/controls/MiniControls";
+import { PageLayout } from "@layouts/PageLayout";
 
 const QueuePage: NextPage<{
   queue: SimpleSonosTrack[];
-  playingState: SonosState;
-}> = ({ queue, playingState: initialPlayingState }) => {
+  sonosState: SonosState;
+}> = ({ queue, sonosState: initialSonosState }) => {
   const Router = useRouter();
   const swiperRef = React.useRef<Swiper | null>(null);
   const { data } = useSWR<SonosState>("/api/state", {
-    fallbackData: initialPlayingState,
+    fallbackData: initialSonosState,
   });
   const currentTrackIndex = React.useMemo(() => {
     if (data) {
@@ -68,82 +69,74 @@ const QueuePage: NextPage<{
               <BsCollectionPlay className="w-8 h-8 text-white" />
             </Button>
           </Navigation>
-          <div
-            className="flex flex-col justify-between"
-            style={{ height: "calc(100vh - 72px)" }}
+          <PageLayout
+            leftControls={<VolumeControls />}
+            rightControls={<MiniControls sonosState={initialSonosState} />}
           >
-            <div className="w-full flex flex-grow items-center px-4 py-2">
-              <ReactSwiper
-                slidesPerView={slidesPerView}
-                spaceBetween={50}
-                onSwiper={(swiper) => {
-                  swiperRef.current = swiper;
-                }}
-              >
-                {queue.map((track, index) => {
-                  return (
-                    <SwiperSlide key={track.uri}>
-                      <div className="flex flex-col items-center space-y-4">
-                        <div className="relative">
-                          <CoverArt
-                            alt={track.title}
-                            mediaUri={track.uri}
-                            size="md"
-                            onClick={async () => {
-                              if (currentTrackIndex !== index) {
-                                await fetch(`/api/playback/seek/${index + 1}`);
-                              }
-                            }}
-                            progress={
-                              currentTrackIndex === index
-                                ? data.elapsedTime / data.currentTrack.duration
-                                : undefined
+            <ReactSwiper
+              slidesPerView={slidesPerView}
+              spaceBetween={50}
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper;
+              }}
+            >
+              {queue.map((track, index) => {
+                return (
+                  <SwiperSlide key={track.uri}>
+                    <div className="flex flex-col items-center space-y-4">
+                      <div className="relative">
+                        <CoverArt
+                          alt={track.title}
+                          mediaUri={track.uri}
+                          size="md"
+                          onClick={async () => {
+                            if (currentTrackIndex !== index) {
+                              await fetch(`/api/playback/seek/${index + 1}`);
                             }
-                          />
-                          {currentTrackIndex === index ? (
-                            <div className="absolute flex w-full h-full items-center justify-center bg-slate-900 bg-opacity-90 top-0">
-                              {data.playbackState === "STOPPED" ||
-                              data.playbackState === "PAUSED_PLAYBACK" ? (
-                                <Button
-                                  size="lg"
-                                  onClick={() => {
-                                    fetch("/api/playback/play");
-                                  }}
-                                >
-                                  <IoPlay className="w-14 h-14 text-white" />
-                                </Button>
-                              ) : null}
-                              {data.playbackState === "PLAYING" ||
-                              data.playbackState === "TRANSITIONING" ? (
-                                <Button
-                                  size="lg"
-                                  onClick={() => {
-                                    fetch("/api/playback/pause");
-                                  }}
-                                >
-                                  <IoPause className="w-14 h-14 text-white" />
-                                </Button>
-                              ) : null}
-                            </div>
-                          ) : null}
-                        </div>
-                        <TextToSpeechHeading
-                          className="text-lg text-center line-clamp-2"
-                          text={track.title}
+                          }}
+                          progress={
+                            currentTrackIndex === index
+                              ? data.elapsedTime / data.currentTrack.duration
+                              : undefined
+                          }
                         />
+                        {currentTrackIndex === index ? (
+                          <div className="absolute flex w-full h-full items-center justify-center bg-slate-900 bg-opacity-90 top-0">
+                            {data.playbackState === "STOPPED" ||
+                            data.playbackState === "PAUSED_PLAYBACK" ? (
+                              <Button
+                                size="lg"
+                                onClick={() => {
+                                  fetch("/api/playback/play");
+                                }}
+                              >
+                                <IoPlay className="w-14 h-14 text-white" />
+                              </Button>
+                            ) : null}
+                            {data.playbackState === "PLAYING" ||
+                            data.playbackState === "TRANSITIONING" ? (
+                              <Button
+                                size="lg"
+                                onClick={() => {
+                                  fetch("/api/playback/pause");
+                                }}
+                              >
+                                <IoPause className="w-14 h-14 text-white" />
+                              </Button>
+                            ) : null}
+                          </div>
+                        ) : null}
                       </div>
-                    </SwiperSlide>
-                  );
-                })}
-              </ReactSwiper>
-            </div>
-            <div className="flex flex-col md:flex-row items-center justify-center md:justify-between p-2 space-y-4">
-              <VolumeControls />
-              <div className="flex items-center justify-center">
-                <MiniControls playbackState={initialPlayingState} />
-              </div>
-            </div>
-          </div>
+                      <TextToSpeechHeading
+                        className="text-lg text-center line-clamp-2"
+                        text={track.title}
+                      />
+                    </div>
+                  </SwiperSlide>
+                );
+              })}
+            </ReactSwiper>
+          </PageLayout>
         </>
       </RootLayout>
     );
@@ -152,12 +145,12 @@ const QueuePage: NextPage<{
 
 export const getServerSideProps: GetServerSideProps = async ({}) => {
   const queue = await SonosApi.getQueue();
-  const playingState = await SonosApi.getState();
+  const sonosState = await SonosApi.getState();
 
   return {
     props: {
       queue,
-      playingState,
+      sonosState,
     },
   };
 };

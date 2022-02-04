@@ -15,12 +15,12 @@ import { CollectionSwiper } from "@components/CollectionSwiper";
 const SingleAlbumPage: NextPage<{
   tracks: SpotifyApi.TrackObjectSimplified[];
   album: Collection;
-  playingState: SonosState;
+  sonosState: SonosState;
   selectedTrackNumber: number;
 }> = ({
   tracks,
   album,
-  playingState: initialPlayingState,
+  sonosState: initialSonosState,
   selectedTrackNumber,
 }) => {
   const Router = useRouter();
@@ -45,9 +45,9 @@ const SingleAlbumPage: NextPage<{
             selectedTrackNumber={selectedTrackNumber}
           />
           <div className="flex md:flex-row flex-col justify-between p-2 space-y-4">
-            <CurrentlyPlaying playbackState={initialPlayingState} />
+            <CurrentlyPlaying sonosState={initialSonosState} />
             <div className="flex items-center justify-center">
-              <MiniControls playbackState={initialPlayingState} />
+              <MiniControls sonosState={initialSonosState} />
             </div>
           </div>
         </div>
@@ -63,10 +63,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     Converter.getSpotifyAlbumUriFromAlbumId(albumId)
   );
 
-  const playingState = await SonosApi.getState();
+  const sonosState = await SonosApi.getState();
   const tracks = await Spotify.getTrackListForAlbum(albumId);
   const currentTrack = tracks.find(
-    (track) => track.uri === playingState.currentTrack.uri
+    (track) => track.uri === sonosState.currentTrack.uri
   );
   const selectedTrackNumber =
     currentTrack && currentTrack.track_number > 1
@@ -78,7 +78,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       props: {
         tracks,
         album,
-        playingState,
+        sonosState,
         selectedTrackNumber,
       },
     };

@@ -8,12 +8,12 @@ import { SonosState } from "@custom-types/Sonos";
 
 const MusicHomepage: NextPage<{
   music: Collection[];
-  playingState: SonosState;
-}> = ({ music, playingState: initialPlayingState }) => {
+  sonosState: SonosState;
+}> = ({ music, sonosState: initialSonosState }) => {
   return (
     <CollectionHomepageLayout
       collections={music}
-      initialPlayingState={initialPlayingState}
+      sonosState={initialSonosState}
     />
   );
 };
@@ -22,12 +22,12 @@ export default MusicHomepage;
 
 export const getServerSideProps: GetServerSideProps = async ({}) => {
   const music = await Database.getMusicCollection();
-  const playingState = await SonosApi.getState();
+  const sonosState = await SonosApi.getState();
 
   return {
     props: {
       music,
-      playingState,
+      sonosState,
     },
   };
 };

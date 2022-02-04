@@ -6,12 +6,12 @@ import useSWR from "swr";
 import { CoverArt } from "./CoverArt";
 
 export const CurrentlyPlaying: React.FC<{
-  playbackState?: SonosState;
+  sonosState?: SonosState;
   showArtist?: boolean;
-}> = ({ playbackState, showArtist = false }) => {
+}> = ({ sonosState: initialSonosState, showArtist = false }) => {
   const Router = useRouter();
   const { data } = useSWR<SonosState>("/api/state", {
-    fallbackData: playbackState,
+    fallbackData: initialSonosState,
   });
 
   if (!data || !data.currentTrack || !data.currentTrack.title) {

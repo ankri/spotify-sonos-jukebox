@@ -10,10 +10,10 @@ import { Button } from "../Button";
 import useSWR from "swr";
 
 export const MiniControls: React.FC<{
-  playbackState?: SonosState;
-}> = ({ playbackState }) => {
+  sonosState?: SonosState;
+}> = ({ sonosState: initialSonosState }) => {
   const { data } = useSWR<SonosState>("/api/state", {
-    fallbackData: playbackState,
+    fallbackData: initialSonosState,
   });
 
   if (!data) {
