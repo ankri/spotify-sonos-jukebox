@@ -8,25 +8,28 @@ import initialAudiobooks from "./database/audiobooks.json";
 import initialStories from "./database/stories.json";
 
 const musicCollection: Collection[] = initialMusicCollection.map(
-  (collection) => ({
+  (collection, index) => ({
     ...collection,
     type: "music",
     imageUrl: collection.imageUrl ?? null,
     artist: collection.artist ?? null,
+    index,
   })
 );
-const audiobooks: Collection[] = initialAudiobooks.map((collection) => ({
+const audiobooks: Collection[] = initialAudiobooks.map((collection, index) => ({
   ...collection,
   type: "audiobook",
   imageUrl: (collection as any).imageUrl ?? null,
   artist: collection.artist ?? null,
+  index,
 }));
 
-const stories: Collection[] = initialStories.map((collection) => ({
+const stories: Collection[] = initialStories.map((collection, index) => ({
   ...collection,
   type: "story",
   imageUrl: (collection as any).imageUrl ?? null,
   artist: collection.artist ?? null,
+  index,
 }));
 const tracks: Track[] = initialTracks;
 
