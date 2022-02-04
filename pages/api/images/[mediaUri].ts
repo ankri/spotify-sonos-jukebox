@@ -21,7 +21,7 @@ export default async function handler(
 
       switch (type) {
         case "track":
-          const trackInfo = Database.getTrackInfo(mediaUri);
+          const trackInfo = await Database.getTrackInfo(mediaUri);
 
           if (trackInfo && trackInfo.imageUrl) {
             imageUrl = trackInfo.imageUrl;
@@ -31,7 +31,7 @@ export default async function handler(
           }
           break;
         case "album":
-          const albumInfo = Database.getMusicInfo(mediaUri);
+          const albumInfo = await Database.getCollectionInfo(mediaUri);
 
           if (albumInfo && albumInfo.imageUrl) {
             imageUrl = albumInfo.imageUrl;
@@ -41,7 +41,7 @@ export default async function handler(
           }
           break;
         case "playlist":
-          const playlistInfo = Database.getMusicInfo(mediaUri);
+          const playlistInfo = await Database.getCollectionInfo(mediaUri);
           if (playlistInfo && playlistInfo.imageUrl) {
             imageUrl = playlistInfo.imageUrl;
           } else {

@@ -21,7 +21,7 @@ const StoriesHomepage: NextPage<{
 export default StoriesHomepage;
 
 export const getServerSideProps: GetServerSideProps = async ({}) => {
-  const stories = Database.getAllStories();
+  const stories = await Database.getAllStories();
   const playingState = await SonosApi.getState();
 
   return {

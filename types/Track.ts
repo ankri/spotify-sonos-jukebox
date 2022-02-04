@@ -1,6 +1,3 @@
-export interface Track {
-  mediaUri: string;
-  name: string;
-  artist?: string;
-  imageUrl?: string;
-}
+import { Prisma, Track as PrismaTrack } from "@prisma/client";
+
+export type Track = PrismaTrack;

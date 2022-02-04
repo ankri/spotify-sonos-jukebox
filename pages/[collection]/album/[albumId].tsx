@@ -59,7 +59,7 @@ const SingleAlbumPage: NextPage<{
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const albumId = query.albumId as string;
 
-  const album = Database.getCollectionInfo(
+  const album = await Database.getCollectionInfo(
     Converter.getSpotifyAlbumUriFromAlbumId(albumId)
   );
 

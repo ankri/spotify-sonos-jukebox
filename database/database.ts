@@ -1,39 +1,54 @@
-import { Collection } from "@custom-types/Collection";
+import { Collection, CollectionTypes } from "@custom-types/Collection";
 import { Track } from "@custom-types/Track";
-import * as fs from "fs";
+import { prisma } from "./prisma";
 
-import initialTracks from "./database/tracks.json";
-import initialMusicCollection from "./database/music.json";
-import initialAudiobooks from "./database/audiobooks.json";
-import initialStories from "./database/stories.json";
-
-const musicCollection: Collection[] = initialMusicCollection;
-const audiobooks: Collection[] = initialAudiobooks;
-const stories: Collection[] = initialStories;
-const tracks: Track[] = initialTracks;
-
-export const getTrackInfo = (mediaUri: string): Track | undefined => {
-  return tracks.find((track) => track.mediaUri === mediaUri);
+export const getTrackInfo = async (mediaUri: string): Promise<Track | null> => {
+  return prisma.track.findUnique({
+    where: {
+      mediaUri,
+    },
+  });
 };
 
-export const getMusicInfo = (mediaUri: string): Collection | undefined => {
-  return musicCollection.find((music) => music.mediaUri === mediaUri);
+export const getCollectionInfo = (
+  mediaUri: string
+): Promise<Collection | null> => {
+  return prisma.collection.findUnique({
+    where: {
+      mediaUri,
+    },
+  });
 };
 
-export const getCollectionInfo = (mediaUri: string): Collection | undefined => {
-  return [...musicCollection, ...audiobooks, ...stories].find(
-    (collection) => collection.mediaUri === mediaUri
-  );
+export const getMusicCollection = (): Promise<Collection[]> => {
+  return prisma.collection.findMany({
+    where: {
+      type: CollectionTypes.music,
+    },
+    orderBy: {
+      index: "asc",
+    },
+  });
 };
 
-export const getMusicCollection = () => {
-  return musicCollection;
+export const getAllAudiobooks = (): Promise<Collection[]> => {
+  return prisma.collection.findMany({
+    where: {
+      type: CollectionTypes.audiobook,
+    },
+    orderBy: {
+      index: "asc",
+    },
+  });
 };
 
-export const getAllAudiobooks = () => {
-  return audiobooks;
-};
-
-export const getAllStories = () => {
-  return stories;
+export const getAllStories = (): Promise<Collection[]> => {
+  return prisma.collection.findMany({
+    where: {
+      type: CollectionTypes.story,
+    },
+    orderBy: {
+      index: "asc",
+    },
+  });
 };

@@ -71,7 +71,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   const playlistId = query.playlistId as string;
 
-  const playlist = Database.getCollectionInfo(
+  const playlist = await Database.getCollectionInfo(
     Converter.getSpotifyPlaylistUriFromPlaylistId(playlistId)
   );
 

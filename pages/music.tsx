@@ -21,7 +21,7 @@ const MusicHomepage: NextPage<{
 export default MusicHomepage;
 
 export const getServerSideProps: GetServerSideProps = async ({}) => {
-  const music = Database.getMusicCollection();
+  const music = await Database.getMusicCollection();
   const playingState = await SonosApi.getState();
 
   return {

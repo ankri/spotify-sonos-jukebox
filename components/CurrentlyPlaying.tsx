@@ -14,8 +14,8 @@ export const CurrentlyPlaying: React.FC<{
     fallbackData: playbackState,
   });
 
-  if (!data) {
-    return null;
+  if (!data || !data.currentTrack || !data.currentTrack.title) {
+    return <div />;
   } else {
     if (
       data.currentTrack.title.startsWith("google-") &&
