@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.collection-list-item {
+  display: grid;
+  @apply grid-rows-2;
+  grid-template-columns: min-content min-content 1fr;
+}
+
+@media (min-width: 768px) {
+  .collection-list-item {
+    display: grid;
+    @apply grid-rows-1;
+    grid-template-columns: min-content min-content 1fr min-content;
+  }
+}

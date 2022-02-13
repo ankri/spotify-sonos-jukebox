@@ -19,11 +19,17 @@ export const Button: React.FC<{
   size?: ButtonSize;
   onClick: () => void;
   className?: string;
-}> = ({ onClick, children, className, size = "sm" }) => {
+  disabled?: boolean;
+}> = ({ onClick, disabled, children, className, size = "sm" }) => {
   const buttonStyles = useButtonStyles(size, className);
 
   return (
-    <button type="button" onClick={onClick} className={buttonStyles}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={buttonStyles}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

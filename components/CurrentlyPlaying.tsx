@@ -4,11 +4,13 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import useSWR from "swr";
 import { CoverArt } from "./CoverArt";
+import classNames from "classnames";
 
 export const CurrentlyPlaying: React.FC<{
   sonosState?: SonosState;
   showArtist?: boolean;
-}> = ({ sonosState: initialSonosState, showArtist = false }) => {
+  size?: "sm" | "lg";
+}> = ({ size = "lg", sonosState: initialSonosState, showArtist = false }) => {
   const Router = useRouter();
   const { data } = useSWR<SonosState>("/api/state", {
     fallbackData: initialSonosState,
@@ -36,7 +38,10 @@ export const CurrentlyPlaying: React.FC<{
             size="sm"
           />
           <h1
-            className="text-2xl tracking-wider md:line-clamp-1 line-clamp-2"
+            className={classNames("text-2xl tracking-wider", {
+              "hidden md:block md:line-clamp-1": size === "sm",
+              "md:line-clamp-1 line-clamp-2": size === "lg",
+            })}
             style={{ fontVariant: "small-caps" }}
           >
             {data.currentTrack.title}
