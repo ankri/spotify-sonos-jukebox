@@ -14,8 +14,20 @@ const reorder = function <E>(list: E[], startIndex: number, endIndex: number) {
 export const CollectionList: React.FC<{ collections: Collection[] }> = ({
   collections: initialCollections,
 }) => {
+  const [isMounted, setIsMounted] = React.useState(false);
+  React.useEffect(() => {
+    setIsMounted(true), [];
+  });
+
   const [collections, setCollections] =
     React.useState<Collection[]>(initialCollections);
+
+  const onUpdate = React.useCallback(
+    (newCollection: Collection) => {
+      console.log(newCollection);
+    },
+    [collections]
+  );
 
   const onDragEnd = React.useCallback(
     (result: DropResult) => {
@@ -35,39 +47,41 @@ export const CollectionList: React.FC<{ collections: Collection[] }> = ({
     [setCollections]
   );
 
-  return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="list">
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className="divide-y-2 divide-slate-600"
-          >
-            {collections.map((collection, index) => {
-              return (
-                <CollectionItem
-                  collection={collection}
-                  key={collection.mediaUri}
-                  index={index}
-                  onUpdate={(newCollection) => {
-                    console.log(newCollection);
-                  }}
-                  onRemove={() => {
-                    console.log("TODO remove from database");
-                    setCollections((oldCollections) => {
-                      return oldCollections.filter(
-                        (col) => col.mediaUri !== collection.mediaUri
-                      );
-                    });
-                  }}
-                />
-              );
-            })}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
-  );
+  if (isMounted) {
+    return (
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="list">
+          {(provided) => (
+            <div
+              className="divide-y-2 divide-slate-600"
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {collections.map((collection, index) => {
+                return (
+                  <CollectionItem
+                    key={collection.mediaUri}
+                    collection={collection}
+                    index={index}
+                    onUpdate={onUpdate}
+                    onRemove={() => {
+                      console.log("TODO remove from database");
+                      setCollections((oldCollections) => {
+                        return oldCollections.filter(
+                          (col) => col.mediaUri !== collection.mediaUri
+                        );
+                      });
+                    }}
+                  />
+                );
+              })}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    );
+  } else {
+    return <div />;
+  }
 };
