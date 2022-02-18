@@ -1,33 +1,23 @@
 import { Collection } from "@custom-types/Collection";
 import { CollectionHomepageLayout } from "@layouts/CollectionHomepageLayout";
-import { GetServerSideProps, NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import * as React from "react";
 import * as Database from "@database/database";
-import * as SonosApi from "@sonos/api";
-import { SonosState } from "@custom-types/Sonos";
 
 const StoriesHomepage: NextPage<{
   stories: Collection[];
-  sonosState: SonosState;
-}> = ({ stories, sonosState: initialSonosState }) => {
-  return (
-    <CollectionHomepageLayout
-      collections={stories}
-      sonosState={initialSonosState}
-    />
-  );
+}> = ({ stories }) => {
+  return <CollectionHomepageLayout collections={stories} />;
 };
 
 export default StoriesHomepage;
 
-export const getServerSideProps: GetServerSideProps = async ({}) => {
+export const getStaticProps: GetStaticProps = async ({}) => {
   const stories = await Database.getAllStories();
-  const sonosState = await SonosApi.getState();
 
   return {
     props: {
       stories,
-      sonosState,
     },
   };
 };

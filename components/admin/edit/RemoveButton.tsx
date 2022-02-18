@@ -22,7 +22,7 @@ export const RemoveButton: React.FC<{
 
               <div className="flex flex-row justify-end space-x-2">
                 <button
-                  className="p-2 flex items-center space-x-2 border rounded-lg justify-center border-slate-300 bg-slate-900 hover:bg-slate-800 active:bg-slate-800"
+                  className="p-2 px-4 flex items-center space-x-2 border rounded-lg justify-center border-slate-300 bg-slate-900 hover:bg-slate-800 active:bg-slate-800"
                   onClick={() => {
                     close();
                   }}
@@ -30,7 +30,7 @@ export const RemoveButton: React.FC<{
                   <MdCancel className="w-4 h-4" /> <span>No</span>
                 </button>
                 <button
-                  className="p-2 flex items-center space-x-2 border rounded-lg justify-center border-slate-300 bg-slate-900 hover:bg-slate-800 active:bg-slate-800"
+                  className="p-2 px-4 flex items-center space-x-2 border rounded-lg justify-center border-slate-300 bg-slate-900 hover:bg-slate-800 active:bg-slate-800"
                   onClick={() => {
                     onRemove();
                     close();

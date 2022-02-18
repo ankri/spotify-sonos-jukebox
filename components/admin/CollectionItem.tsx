@@ -20,7 +20,7 @@ export const CollectionItem: React.FC<{
       <Draggable draggableId={collection.mediaUri} index={index}>
         {(provided) => (
           <div
-            className="grid items-center gap-2 gap-y-0 p-2 collection-list-item"
+            className="grid items-center gap-2 gap-y-0 p-2 collection-list-item cursor-grab"
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}

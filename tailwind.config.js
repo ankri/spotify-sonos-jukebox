@@ -5,7 +5,11 @@ module.exports = {
     "./layouts/**/*.{ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        spotify: "#1DB954",
+      },
+    },
   },
   plugins: [require("@tailwindcss/line-clamp"), require("@tailwindcss/forms")],
 };

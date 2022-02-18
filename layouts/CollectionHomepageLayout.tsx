@@ -7,14 +7,12 @@ import { RootLayout } from "./RootLayout";
 import { TextToSpeechHeading } from "@components/TextToSpeechHeading";
 import { CurrentlyPlaying } from "@components/CurrentlyPlaying";
 import { MiniControls } from "@components/controls/MiniControls";
-import { SonosState } from "@custom-types/Sonos";
 import { usePlayCollection } from "@hooks/usePlayCollection";
 import { PageLayout } from "./PageLayout";
 
 export const CollectionHomepageLayout: React.FC<{
   collections: Collection[];
-  sonosState: SonosState;
-}> = ({ collections, sonosState: initialSonosState }) => {
+}> = ({ collections }) => {
   const playCollection = usePlayCollection();
   const [slidesPerView, setSlidesPerView] = React.useState(1);
   React.useEffect(() => {
@@ -31,7 +29,7 @@ export const CollectionHomepageLayout: React.FC<{
       <>
         <HomepageNavigation />
         <PageLayout
-          leftControls={<CurrentlyPlaying sonosState={initialSonosState} />}
+          leftControls={<CurrentlyPlaying />}
           rightControls={<MiniControls />}
         >
           <Swiper slidesPerView={slidesPerView} spaceBetween={50}>

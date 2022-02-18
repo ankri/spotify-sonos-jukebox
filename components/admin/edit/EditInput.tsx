@@ -1,11 +1,13 @@
 import * as React from "react";
 
-export const EditInput: React.FC<{
-  name: string;
-  label: string;
-  value: string;
-  onChange: (newValue: string) => void;
-}> = ({ name, label, value, onChange }) => {
+export const EditInput: React.FC<
+  {
+    name: string;
+    label: string;
+    value: string;
+    onChange: (newValue: string) => void;
+  } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">
+> = ({ name, label, value, onChange, ...props }) => {
   return (
     <div>
       <label
@@ -16,6 +18,7 @@ export const EditInput: React.FC<{
         {label}
       </label>
       <input
+        {...props}
         type="text"
         name={name}
         id={name}
@@ -23,7 +26,7 @@ export const EditInput: React.FC<{
         onChange={(event) => {
           onChange(event.target.value);
         }}
-        className="shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-slate-50 bg-slate-800 rounded-md"
+        className="shadow-sm p-3 focus:ring-spotify focus:border-spotify block w-full sm:text-sm border-slate-50 bg-zinc-800 rounded-md"
       />
     </div>
   );
