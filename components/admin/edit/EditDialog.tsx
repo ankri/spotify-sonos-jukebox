@@ -1,4 +1,4 @@
-import { CoverArt } from "@components/CoverArt";
+import { CoverArt, useCoverArtStyles } from "@components/CoverArt";
 import { Collection } from "@custom-types/Collection";
 import { Dialog } from "@headlessui/react";
 import * as React from "react";
@@ -25,6 +25,9 @@ export const EditDialog: React.FC<{
   onUpdate: (updatedCollection: Collection) => void;
 }> = ({ isDialogOpen, onClose, collection: initialCollection, onUpdate }) => {
   const [collection, setCollection] = React.useState(initialCollection);
+  const [imageUrl, setImageUrl] = React.useState(initialCollection.imageUrl);
+  const coverArtStyles = useCoverArtStyles("md");
+  console.log(imageUrl);
 
   return (
     <Dialog
@@ -61,11 +64,28 @@ export const EditDialog: React.FC<{
                 }}
                 value={collection.artist ?? ""}
               />
-              <CoverArt
+              <img
                 alt={collection.name}
-                mediaUri={collection.mediaUri}
-                size="md"
+                src={
+                  imageUrl
+                    ? imageUrl
+                    : `/api/images/${collection.mediaUri}?original`
+                }
+                {...coverArtStyles}
               />
+              <EditInput
+                label="Cover Art URL (optional)"
+                name="imageUrl"
+                onChange={(newUrl) => {
+                  const newImageUrl =
+                    newUrl && newUrl.length > 0 ? newUrl : null;
+                  console.log(newImageUrl);
+                  setImageUrl(newImageUrl);
+                }}
+                type="url"
+                value={imageUrl ?? ""}
+              />
+              <hr />
               <PlayButton mediaUri={collection.mediaUri} />
             </div>
           </div>

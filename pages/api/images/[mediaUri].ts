@@ -14,39 +14,52 @@ export default async function handler(
     const [source, type, id] =
       Converter.normalizePlaylistUri(mediaUri).split(":");
 
-    if (imageCache.has(mediaUri)) {
+    // we want to be able to bypass the database to look for the original image
+    const showOriginal = req.query.original !== undefined;
+
+    if (!showOriginal && imageCache.has(mediaUri)) {
       res.redirect(302, imageCache.get(mediaUri)!);
     } else {
       let imageUrl: string | undefined = undefined;
 
       switch (type) {
         case "track":
-          const trackInfo = await Database.getTrackInfo(mediaUri);
+          // we do not need to query the database when looking for the original image
+          const trackInfo = showOriginal
+            ? null
+            : await Database.getTrackInfo(mediaUri);
 
+          // when the image is available inside the database we have set a custom image
           if (trackInfo && trackInfo.imageUrl) {
             imageUrl = trackInfo.imageUrl;
           } else {
+            // otherwise we query spotify for the image
             const trackInfo = await SpotifyApi.getTrackInfo(id);
-            imageUrl = trackInfo.album.images[0].url;
+            // the first image seems to always be the correct image
+            imageUrl = trackInfo.album.images[0]?.url ?? undefined;
           }
           break;
         case "album":
-          const albumInfo = await Database.getCollectionInfo(mediaUri);
+          const albumInfo = showOriginal
+            ? null
+            : await Database.getCollectionInfo(mediaUri);
 
           if (albumInfo && albumInfo.imageUrl) {
             imageUrl = albumInfo.imageUrl;
           } else {
             const albumInfo = await SpotifyApi.getAlbumInfo(id);
-            imageUrl = albumInfo.images[0].url;
+            imageUrl = albumInfo.images[0]?.url ?? undefined;
           }
           break;
         case "playlist":
-          const playlistInfo = await Database.getCollectionInfo(mediaUri);
+          const playlistInfo = showOriginal
+            ? null
+            : await Database.getCollectionInfo(mediaUri);
           if (playlistInfo && playlistInfo.imageUrl) {
             imageUrl = playlistInfo.imageUrl;
           } else {
             const playlistInfo = await SpotifyApi.getPlaylistInfo(id);
-            imageUrl = playlistInfo.images[0].url;
+            imageUrl = playlistInfo.images[0]?.url ?? undefined;
           }
           break;
         default:
@@ -54,7 +67,13 @@ export default async function handler(
       }
 
       if (imageUrl) {
-        imageCache.set(mediaUri, imageUrl);
+        // we do not update the cache when looking for the original image
+        if (!showOriginal) {
+          // otherwise we update the cache with the image we found ...
+          imageCache.set(mediaUri, imageUrl);
+        }
+
+        // ... and redirect to the correct image
         res.redirect(302, imageUrl);
       } else {
         res.status(404).end("");
