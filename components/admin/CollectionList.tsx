@@ -16,18 +16,15 @@ export const CollectionList: React.FC<{ collections: Collection[] }> = ({
 }) => {
   const [isMounted, setIsMounted] = React.useState(false);
   React.useEffect(() => {
-    setIsMounted(true), [];
-  });
+    setIsMounted(true);
+  }, []);
 
   const [collections, setCollections] =
     React.useState<Collection[]>(initialCollections);
 
-  const onUpdate = React.useCallback(
-    (newCollection: Collection) => {
-      console.log(newCollection);
-    },
-    [collections]
-  );
+  const onUpdate = React.useCallback((newCollection: Collection) => {
+    console.log(newCollection);
+  }, []);
 
   const onDragEnd = React.useCallback(
     (result: DropResult) => {
