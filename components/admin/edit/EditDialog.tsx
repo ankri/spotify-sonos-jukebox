@@ -45,7 +45,7 @@ export const EditDialog: React.FC<{
                 label="Name"
                 name="name"
                 onChange={(newName) => {
-                  setCollection((collection) => ({
+                  setCollection((collection: Collection) => ({
                     ...collection,
                     name: newName,
                   }));
@@ -57,7 +57,7 @@ export const EditDialog: React.FC<{
                 label="Artist (optional)"
                 name="artist"
                 onChange={(newArtist) => {
-                  setCollection((collection) => ({
+                  setCollection((collection: Collection) => ({
                     ...collection,
                     artist: newArtist,
                   }));
