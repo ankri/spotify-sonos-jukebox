@@ -7,25 +7,25 @@ import { Collection } from "@custom-types/Collection";
 import { CollectionList } from "@components/admin/CollectionList";
 import useSWR from "swr";
 
-const AdminPage: NextPage<{ musicCollections: Collection[] }> = ({
-  musicCollections: initialMusicCollections,
+const AdminPage: NextPage<{ storyCollections: Collection[] }> = ({
+  storyCollections: initialStoryCollections,
 }) => {
-  const { data: musicCollections, mutate: setMusicCollections } = useSWR(
-    "/api/collections/music",
+  const { data: storyCollections, mutate: setStoryCollections } = useSWR(
+    "/api/collections/story",
     {
-      fallbackData: initialMusicCollections,
+      fallbackData: initialStoryCollections,
       refreshInterval: 60 * 1000,
     }
   );
 
   return (
     <AdminLayout>
-      {musicCollections ? (
+      {storyCollections ? (
         <>
           <AddAlbumOrPlaylist
-            collectionType="music"
+            collectionType="story"
             onCreateCollection={(newCollection: Collection) => {
-              setMusicCollections((oldCollections) => {
+              setStoryCollections((oldCollections) => {
                 if (oldCollections) {
                   return [...oldCollections, newCollection];
                 }
@@ -35,8 +35,8 @@ const AdminPage: NextPage<{ musicCollections: Collection[] }> = ({
           <div className="mt-4">
             <div>re-order or edit your music albums and playlists</div>
             <CollectionList
-              collections={musicCollections}
-              collectionsType="music"
+              collections={storyCollections}
+              collectionsType="story"
             />
           </div>
         </>
@@ -46,11 +46,11 @@ const AdminPage: NextPage<{ musicCollections: Collection[] }> = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async ({}) => {
-  const musicCollections = await Database.getMusicCollection();
+  const storyCollections = await Database.getAllStories();
 
   return {
     props: {
-      musicCollections,
+      storyCollections,
     },
   };
 };

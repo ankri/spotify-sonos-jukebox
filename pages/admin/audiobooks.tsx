@@ -7,25 +7,23 @@ import { Collection } from "@custom-types/Collection";
 import { CollectionList } from "@components/admin/CollectionList";
 import useSWR from "swr";
 
-const AdminPage: NextPage<{ musicCollections: Collection[] }> = ({
-  musicCollections: initialMusicCollections,
+const AdminPage: NextPage<{ audiobookCollections: Collection[] }> = ({
+  audiobookCollections: initialAudiobookCollections,
 }) => {
-  const { data: musicCollections, mutate: setMusicCollections } = useSWR(
-    "/api/collections/music",
-    {
-      fallbackData: initialMusicCollections,
+  const { data: audiobookCollections, mutate: setAudiobookCollections } =
+    useSWR("/api/collections/audiobook", {
+      fallbackData: initialAudiobookCollections,
       refreshInterval: 60 * 1000,
-    }
-  );
+    });
 
   return (
     <AdminLayout>
-      {musicCollections ? (
+      {audiobookCollections ? (
         <>
           <AddAlbumOrPlaylist
-            collectionType="music"
+            collectionType="audiobook"
             onCreateCollection={(newCollection: Collection) => {
-              setMusicCollections((oldCollections) => {
+              setAudiobookCollections((oldCollections) => {
                 if (oldCollections) {
                   return [...oldCollections, newCollection];
                 }
@@ -35,8 +33,8 @@ const AdminPage: NextPage<{ musicCollections: Collection[] }> = ({
           <div className="mt-4">
             <div>re-order or edit your music albums and playlists</div>
             <CollectionList
-              collections={musicCollections}
-              collectionsType="music"
+              collections={audiobookCollections}
+              collectionsType="audiobook"
             />
           </div>
         </>
@@ -46,11 +44,11 @@ const AdminPage: NextPage<{ musicCollections: Collection[] }> = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async ({}) => {
-  const musicCollections = await Database.getMusicCollection();
+  const audiobookCollections = await Database.getAllAudiobooks();
 
   return {
     props: {
-      musicCollections,
+      audiobookCollections,
     },
   };
 };

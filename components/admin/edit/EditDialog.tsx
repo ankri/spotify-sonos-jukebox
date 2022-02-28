@@ -27,7 +27,6 @@ export const EditDialog: React.FC<{
   const [collection, setCollection] = React.useState(initialCollection);
   const [imageUrl, setImageUrl] = React.useState(initialCollection.imageUrl);
   const coverArtStyles = useCoverArtStyles("md");
-  console.log(imageUrl);
 
   return (
     <Dialog
@@ -79,7 +78,6 @@ export const EditDialog: React.FC<{
                 onChange={(newUrl) => {
                   const newImageUrl =
                     newUrl && newUrl.length > 0 ? newUrl : null;
-                  console.log(newImageUrl);
                   setImageUrl(newImageUrl);
                 }}
                 type="url"
