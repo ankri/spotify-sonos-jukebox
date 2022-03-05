@@ -7,7 +7,7 @@ const validateSpotifyUrl = (
   url: string
 ): { mediaId: string; mediaType: "album" | "playlist" } | null => {
   const pattern = new RegExp(
-    /https:\/\/open\.spotify\.com\/(album|playlist)\/([A-Za-z0-9]+)(\?si=[A-Za-z0-9\-]+)?/gm
+    /https:\/\/open\.spotify\.com\/(album|playlist)\/([A-Za-z0-9]+)(\?si=[A-Za-z0-9\-\_]+)?/gm
   );
   const result = pattern.exec(url);
   if (result) {

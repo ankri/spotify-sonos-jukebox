@@ -22,46 +22,52 @@ export const CollectionList: React.FC<{
     setIsMounted(true);
   }, []);
 
-  const onUpdate = React.useCallback(async (newCollection: Collection) => {
-    const response = await fetch(`/api/collections/${collectionsType}`, {
-      method: "PUT",
-      body: JSON.stringify(newCollection),
-    });
+  const onUpdate = React.useCallback(
+    async (newCollection: Collection) => {
+      const response = await fetch(`/api/collections/${collectionsType}`, {
+        method: "PUT",
+        body: JSON.stringify(newCollection),
+      });
 
-    if (response.status === 200) {
-      mutate(
-        `/api/collections/${collectionsType}`,
-        (oldCollections: Collection[]) => {
-          if (oldCollections) {
-            const index = oldCollections.findIndex(
-              (collection) => collection.mediaUri === newCollection.mediaUri
-            );
-            oldCollections[index] = newCollection;
-            return [...oldCollections];
+      if (response.status === 200) {
+        mutate(
+          `/api/collections/${collectionsType}`,
+          (oldCollections: Collection[]) => {
+            if (oldCollections) {
+              const index = oldCollections.findIndex(
+                (collection) => collection.mediaUri === newCollection.mediaUri
+              );
+              oldCollections[index] = newCollection;
+              return [...oldCollections];
+            }
           }
-        }
-      );
-    }
-  }, []);
+        );
+      }
+    },
+    [collectionsType, mutate]
+  );
 
-  const onRemove = React.useCallback(async (collection: Collection) => {
-    const response = await fetch(`/api/collections/${collectionsType}`, {
-      method: "DELETE",
-      body: JSON.stringify(collection),
-    });
-    if (response.status === 200) {
-      mutate(
-        `/api/collections/${collectionsType}`,
-        (oldCollections: Collection[]) => {
-          if (oldCollections) {
-            return oldCollections.filter(
-              (col) => col.mediaUri !== collection.mediaUri
-            );
+  const onRemove = React.useCallback(
+    async (collection: Collection) => {
+      const response = await fetch(`/api/collections/${collectionsType}`, {
+        method: "DELETE",
+        body: JSON.stringify(collection),
+      });
+      if (response.status === 200) {
+        mutate(
+          `/api/collections/${collectionsType}`,
+          (oldCollections: Collection[]) => {
+            if (oldCollections) {
+              return oldCollections.filter(
+                (col) => col.mediaUri !== collection.mediaUri
+              );
+            }
           }
-        }
-      );
-    }
-  }, []);
+        );
+      }
+    },
+    [collectionsType, mutate]
+  );
 
   const onDragEnd = React.useCallback(
     async (result: DropResult) => {
@@ -92,7 +98,7 @@ export const CollectionList: React.FC<{
         mutate(`/api/collections/${collectionsType}`);
       }
     },
-    [collections]
+    [collections, collectionsType, mutate]
   );
 
   if (isMounted) {
