@@ -1,3 +1,4 @@
+import { imageCache } from "@cache/cache";
 import { NextApiHandler } from "next";
 
 const availableRoutes = ["music", "stories", "audiobooks"];
@@ -13,6 +14,9 @@ const handler: NextApiHandler = async (req, res) => {
         await res.unstable_revalidate(`/${route}`);
       }
     }
+
+    // we also clear the image cache so we always show the correct images
+    imageCache.clear();
 
     return res.json({ revalidated: true });
   } catch (error) {
