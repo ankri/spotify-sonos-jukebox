@@ -4,59 +4,53 @@ import * as React from "react";
 import * as Database from "@database/database";
 import { Collection } from "@custom-types/Collection";
 import useSWR from "swr";
-import { CoverArt } from "@components/CoverArt";
 import { useRouter } from "next/router";
+
+import { CoverArt } from "@components/CoverArt";
 
 const AdminPage: NextPage<{ musicCollections: Collection[] }> = ({
   musicCollections: initialMusicCollections,
 }) => {
   const Router = useRouter();
-  const { data: musicCollections, mutate: setMusicCollections } = useSWR(
-    "/api/collections/music",
-    {
-      fallbackData: initialMusicCollections,
-      refreshInterval: 60 * 1000,
-    }
-  );
+  const { data: musicCollections } = useSWR("/api/collections/music", {
+    fallbackData: initialMusicCollections,
+    refreshInterval: 60 * 1000,
+  });
 
   return (
     <AdminLayout>
       {musicCollections ? (
-        <>
-          <div className="flex flex-col">
-            {musicCollections.map((collection) => (
-              <div
-                key={collection.mediaUri}
-                className="grid items-center gap-2 gap-y-0 p-2 collection-list-item cursor-pointer"
-                onClick={() => {
-                  Router.push(`/admin/tracks/${collection.mediaUri}`);
-                }}
-              >
-                <div className="order-2 max-w-fit">
-                  <CoverArt
-                    mediaUri={collection.mediaUri}
-                    alt={collection.name}
-                    size="sm"
-                  />
-                </div>
-                <div className="max-w-full order-last md:order-3 col-start-2 col-span-3 md:col-start-3 md:col-span-1">
-                  <h1
-                    className="text-md md:text-2xl tracking-wide text-slate-50"
-                    style={{ fontVariant: "small-caps" }}
-                  >
-                    {collection.name}
-                  </h1>
-                  <h2
-                    className="text-xs md:text-md tracking-wide text-slate-300"
-                    style={{ fontVariant: "small-caps" }}
-                  >
-                    {collection.artist}
-                  </h2>
-                </div>
+        <div className="flex flex-col">
+          {musicCollections.map((collection) => (
+            <div
+              key={collection.mediaUri}
+              className="flex items-center space-x-2 p-2 cursor-pointer hover:bg-slate-800 active:bg-slate-800 focus:bg-slate-800"
+              onClick={() => {
+                Router.push(`/admin/tracks/${collection.mediaUri}`);
+              }}
+            >
+              <CoverArt
+                mediaUri={collection.mediaUri}
+                alt={collection.name}
+                size="sm"
+              />
+              <div className="flex-grow">
+                <h1
+                  className="text-md md:text-2xl tracking-wide text-slate-50"
+                  style={{ fontVariant: "small-caps" }}
+                >
+                  {collection.name}
+                </h1>
+                <h2
+                  className="text-xs md:text-md tracking-wide text-slate-300"
+                  style={{ fontVariant: "small-caps" }}
+                >
+                  {collection.artist}
+                </h2>
               </div>
-            ))}
-          </div>
-        </>
+            </div>
+          ))}
+        </div>
       ) : null}
     </AdminLayout>
   );

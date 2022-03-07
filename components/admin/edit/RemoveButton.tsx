@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useButtonStyles } from "@components/Button";
+import { Button, useButtonStyles } from "@components/Button";
 import { MdCancel, MdCheck, MdDelete } from "react-icons/md";
 import { Popover } from "@headlessui/react";
 

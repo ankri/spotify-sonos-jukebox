@@ -38,7 +38,16 @@ export const CoverArt: React.FC<{
   onClick?: () => void;
   progress?: number;
   showOriginal?: boolean;
-}> = ({ mediaUri, alt, progress, size, onClick, showOriginal = false }) => {
+  noCache?: boolean;
+}> = ({
+  mediaUri,
+  alt,
+  progress,
+  size,
+  onClick,
+  showOriginal = false,
+  noCache = false,
+}) => {
   const { style, className } = useCoverArtStyles(size);
 
   return (
@@ -48,7 +57,9 @@ export const CoverArt: React.FC<{
         style={style}
         alt={alt}
         className={className}
-        src={`/api/images/${mediaUri}${showOriginal ? "?original" : ""}`}
+        src={`/api/images/${mediaUri}${showOriginal ? "?original" : ""}${
+          noCache ? "?" + Date.now() : ""
+        }`}
       />
       {typeof progress !== "undefined" ? (
         <>

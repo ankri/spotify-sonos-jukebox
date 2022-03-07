@@ -15,22 +15,41 @@ export const useButtonStyles = (size: ButtonSize, className?: string) =>
     );
   }, [size, className]);
 
-export const Button: React.FC<{
+export type ButtonProps = {
   size?: ButtonSize;
-  onClick: () => void;
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   className?: string;
   disabled?: boolean;
-}> = ({ onClick, disabled, children, className, size = "sm" }) => {
-  const buttonStyles = useButtonStyles(size, className);
+} & React.DetailedHTMLProps<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+>;
 
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={buttonStyles}
-      disabled={disabled}
-    >
-      {children}
-    </button>
-  );
-};
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      onClick,
+      disabled,
+      children,
+      className,
+      size = "sm",
+      ...buttonProps
+    }: ButtonProps,
+    ref
+  ) => {
+    const buttonStyles = useButtonStyles(size, className);
+
+    return (
+      <button
+        {...buttonProps}
+        type="button"
+        onClick={onClick}
+        className={buttonStyles}
+        disabled={disabled}
+        ref={ref}
+      >
+        {children}
+      </button>
+    );
+  }
+);

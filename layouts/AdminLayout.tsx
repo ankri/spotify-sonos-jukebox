@@ -18,7 +18,6 @@ import { useRouter } from "next/router";
 import { config } from "@config/config";
 
 const adminNavigation = [
-  { name: "Dashboard", href: "/admin", icon: FaHome },
   {
     name: "Music",
     href: "/admin/music",
@@ -50,7 +49,7 @@ export const AdminLayout: React.FC<{}> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const { asPath } = useRouter();
   const selectedRoute = React.useMemo(
-    () => adminNavigation.find((entry) => entry.href === asPath),
+    () => adminNavigation.find((entry) => asPath.startsWith(entry.href)),
     [asPath]
   )!;
   const Icon = selectedRoute.icon;
@@ -116,7 +115,7 @@ export const AdminLayout: React.FC<{}> = ({ children }) => {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.href === asPath
+                          asPath.startsWith(item.href)
                             ? "bg-gray-900 text-white"
                             : "text-gray-300 hover:bg-gray-700 hover:text-white",
                           "group flex items-center px-2 py-2 text-base font-medium rounded-md"
@@ -124,7 +123,7 @@ export const AdminLayout: React.FC<{}> = ({ children }) => {
                       >
                         <item.icon
                           className={classNames(
-                            item.href === asPath
+                            asPath.startsWith(item.href)
                               ? "text-gray-300"
                               : "text-gray-400 group-hover:text-gray-300",
                             "mr-4 flex-shrink-0 h-6 w-6"
@@ -141,17 +140,13 @@ export const AdminLayout: React.FC<{}> = ({ children }) => {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.href === asPath
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                          "text-gray-300 hover:bg-gray-700 hover:text-white",
                           "group flex items-center px-2 py-2 text-base font-medium rounded-md"
                         )}
                       >
                         <item.icon
                           className={classNames(
-                            item.href === asPath
-                              ? "text-gray-300"
-                              : "text-gray-400 group-hover:text-gray-300",
+                            "text-gray-400 group-hover:text-gray-300",
                             "mr-4 flex-shrink-0 h-6 w-6"
                           )}
                           aria-hidden="true"
@@ -184,7 +179,7 @@ export const AdminLayout: React.FC<{}> = ({ children }) => {
                     key={item.name}
                     href={item.href}
                     className={classNames(
-                      item.href === asPath
+                      asPath.startsWith(item.href)
                         ? "bg-gray-900 text-white"
                         : "text-gray-300 hover:bg-gray-700 hover:text-white",
                       "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
@@ -192,7 +187,7 @@ export const AdminLayout: React.FC<{}> = ({ children }) => {
                   >
                     <item.icon
                       className={classNames(
-                        item.href === asPath
+                        asPath.startsWith(item.href)
                           ? "text-gray-300"
                           : "text-gray-400 group-hover:text-gray-300",
                         "mr-3 flex-shrink-0 h-6 w-6"
@@ -209,17 +204,13 @@ export const AdminLayout: React.FC<{}> = ({ children }) => {
                     key={item.name}
                     href={item.href}
                     className={classNames(
-                      item.href === asPath
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      "text-gray-300 hover:bg-gray-700 hover:text-white",
                       "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                     )}
                   >
                     <item.icon
                       className={classNames(
-                        item.href === asPath
-                          ? "text-gray-300"
-                          : "text-gray-400 group-hover:text-gray-300",
+                        "text-gray-400 group-hover:text-gray-300",
                         "mr-3 flex-shrink-0 h-6 w-6"
                       )}
                       aria-hidden="true"

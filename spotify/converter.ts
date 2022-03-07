@@ -1,3 +1,5 @@
+import { Track } from "@custom-types/Track";
+
 export const getSpotifyUriFromSonosUri = (uri: string): string | null => {
   const spotifyTrackRegExp = new RegExp(/x\-sonos\-spotify\:(.+)\?.+/gi);
 
@@ -33,3 +35,20 @@ export const getSpotifyTrackUriFromId = (trackId: string) =>
 
 export const getTrackIdFromSpotifyTrackUri = (spotifyTrackUri: string) =>
   spotifyTrackUri.replace("spotify:track:", "");
+
+export const mergeTracks = (
+  spotifyTracks: SpotifyApi.TrackObjectSimplified[],
+  databaseTracks: Track[]
+): Track[] => {
+  return spotifyTracks.map((spotifyTrack) => {
+    const maybeTrack = databaseTracks.find(
+      (databaseTrack) => databaseTrack.mediaUri === spotifyTrack.uri
+    );
+    return {
+      artist: maybeTrack?.artist ?? spotifyTrack.artists[0].name,
+      imageUrl: maybeTrack?.imageUrl ?? null,
+      mediaUri: spotifyTrack.uri,
+      name: maybeTrack?.name ?? spotifyTrack.name,
+    };
+  });
+};

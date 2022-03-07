@@ -1,5 +1,4 @@
-import { CoverArt, useCoverArtStyles } from "@components/CoverArt";
-import { Collection } from "@custom-types/Collection";
+import { useCoverArtStyles } from "@components/CoverArt";
 import { Dialog } from "@headlessui/react";
 import * as React from "react";
 import { FaSpotify } from "react-icons/fa";
@@ -18,15 +17,32 @@ const PlayButton: React.FC<{ mediaUri: string }> = ({ mediaUri }) => {
   );
 };
 
+export interface Item {
+  name: string;
+  mediaUri: string;
+  artist: string | null;
+  imageUrl: string | null;
+}
+
 export const EditDialog: React.FC<{
+  mediaUri: string;
   isDialogOpen: boolean;
   onClose: () => void;
-  collection: Collection;
-  onUpdate: (updatedCollection: Collection) => void;
-}> = ({ isDialogOpen, onClose, collection: initialCollection, onUpdate }) => {
-  const [collection, setCollection] = React.useState(initialCollection);
-  const [imageUrl, setImageUrl] = React.useState(initialCollection.imageUrl);
+  item: Item;
+  onUpdate: (updatedItem: Item) => void;
+}> = ({ mediaUri, isDialogOpen, onClose, item: initialItem, onUpdate }) => {
+  const [item, setItem] = React.useState(initialItem);
+  const [imageUrl, setImageUrl] = React.useState(initialItem.imageUrl);
   const coverArtStyles = useCoverArtStyles("md");
+  const title = React.useMemo(() => {
+    if (mediaUri.includes(":album:")) {
+      return "Edit album";
+    } else if (mediaUri.includes(":playlist:")) {
+      return "Edit playlist";
+    } else if (mediaUri.includes(":track:")) {
+      return "Edit track";
+    }
+  }, [mediaUri]);
 
   return (
     <Dialog
@@ -34,81 +50,92 @@ export const EditDialog: React.FC<{
       onClose={onClose}
       className="fixed z-10 inset-0 overflow-y-auto"
     >
-      <div className="flex items-center justify-center min-h-screen">
-        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-        <div className="relative bg-slate-800 rounded-lg max-w-sm lg:max-w-lg xl:max-w-xl mx-auto border border-slate-300 w-full">
-          <div className="py-4 px-6">
-            <Dialog.Title className="text-xl">Edit item</Dialog.Title>
-            <div className="space-y-2 mt-2">
-              <EditInput
-                label="Name"
-                name="name"
-                onChange={(newName) => {
-                  setCollection((collection: Collection) => ({
-                    ...collection,
-                    name: newName,
-                  }));
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          onUpdate({ ...item, imageUrl });
+        }}
+      >
+        <div className="flex items-center justify-center min-h-screen">
+          <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+          <div className="relative bg-slate-800 rounded-lg max-w-sm lg:max-w-lg xl:max-w-xl mx-auto border border-slate-300 w-full">
+            <div className="py-4 px-6">
+              <Dialog.Title className="text-xl">{title}</Dialog.Title>
+              <div className="space-y-2 mt-2">
+                <EditInput
+                  label="Name"
+                  name="name"
+                  onChange={(newName) => {
+                    setItem((item: Item) => ({
+                      ...item,
+                      name: newName,
+                    }));
+                  }}
+                  value={item.name}
+                  required
+                  autoFocus
+                />
+                <EditInput
+                  label="Artist (optional)"
+                  name="artist"
+                  onChange={(newArtist) => {
+                    setItem((item: Item) => ({
+                      ...item,
+                      artist: newArtist,
+                    }));
+                  }}
+                  value={item.artist ?? ""}
+                />
+                <img
+                  alt={item.name}
+                  src={
+                    imageUrl
+                      ? imageUrl
+                      : `/api/images/${item.mediaUri}?original`
+                  }
+                  {...coverArtStyles}
+                />
+                <EditInput
+                  label="Image URL (optional)"
+                  placeholder="Leave blank to use the original image"
+                  name="imageUrl"
+                  onChange={(newUrl) => {
+                    const newImageUrl =
+                      newUrl && newUrl.length > 0 ? newUrl : null;
+                    setImageUrl(newImageUrl);
+                  }}
+                  type="url"
+                  value={imageUrl ?? ""}
+                  onReset={() => {
+                    setImageUrl(null);
+                  }}
+                />
+                <hr />
+                <PlayButton mediaUri={item.mediaUri} />
+              </div>
+            </div>
+            <div className="bg-slate-700 flex py-4 px-6 flex-row-reverse">
+              <button
+                className="w-full p-2 flex ml-4 items-center space-x-2 border rounded-lg justify-center border-slate-300 bg-green-900 hover:bg-green-800 active:bg-slate-800"
+                type="submit"
+              >
+                <MdCheck className="w-5 h-5" />
+                <span>Save</span>
+              </button>
+              <button
+                className="w-full p-2 flex items-center space-x-2 border rounded-lg justify-center border-slate-300 bg-slate-900 hover:bg-slate-800 active:bg-slate-800"
+                type="button"
+                onClick={() => {
+                  onClose();
                 }}
-                value={collection.name}
-                autoFocus
-              />
-              <EditInput
-                label="Artist (optional)"
-                name="artist"
-                onChange={(newArtist) => {
-                  setCollection((collection: Collection) => ({
-                    ...collection,
-                    artist: newArtist,
-                  }));
-                }}
-                value={collection.artist ?? ""}
-              />
-              <img
-                alt={collection.name}
-                src={
-                  imageUrl
-                    ? imageUrl
-                    : `/api/images/${collection.mediaUri}?original`
-                }
-                {...coverArtStyles}
-              />
-              <EditInput
-                label="Cover Art URL (optional)"
-                name="imageUrl"
-                onChange={(newUrl) => {
-                  const newImageUrl =
-                    newUrl && newUrl.length > 0 ? newUrl : null;
-                  setImageUrl(newImageUrl);
-                }}
-                type="url"
-                value={imageUrl ?? ""}
-              />
-              <hr />
-              <PlayButton mediaUri={collection.mediaUri} />
+              >
+                <MdCancel className="w-5 h-5" />
+                <span>Cancel</span>
+              </button>
             </div>
           </div>
-          <div className="bg-slate-700 flex py-4 px-6 flex-row-reverse">
-            <button
-              className="w-full p-2 flex ml-4 items-center space-x-2 border rounded-lg justify-center border-slate-300 bg-green-900 hover:bg-green-800 active:bg-slate-800"
-              onClick={() => {
-                onUpdate(collection);
-              }}
-            >
-              <MdCheck className="w-5 h-5" />
-              <span>Save</span>
-            </button>
-            <button
-              className="w-full p-2 flex items-center space-x-2 border rounded-lg justify-center border-slate-300 bg-slate-900 hover:bg-slate-800 active:bg-slate-800"
-              onClick={() => {
-                onClose();
-              }}
-            >
-              <MdCancel className="w-5 h-5" />
-              <span>Cancel</span>
-            </button>
-          </div>
         </div>
-      </div>
+      </form>
     </Dialog>
   );
 };

@@ -3,7 +3,7 @@ import { CoverArt } from "@components/CoverArt";
 import { Collection } from "@custom-types/Collection";
 import { Draggable } from "react-beautiful-dnd";
 import { Button } from "@components/Button";
-import { MdEdit } from "react-icons/md";
+import { MdSwapVert, MdEdit } from "react-icons/md";
 import { RemoveButton } from "./edit/RemoveButton";
 import { EditDialog } from "./edit/EditDialog";
 
@@ -20,10 +20,20 @@ export const CollectionItem: React.FC<{
       <Draggable draggableId={collection.mediaUri} index={index}>
         {(provided) => (
           <div
-            className="grid items-center gap-2 gap-y-0 p-2 collection-list-item cursor-grab"
+            className="grid items-center gap-2 gap-y-0 p-2 collection-list-item cursor-pointer hover:bg-slate-800 active:bg-slate-800 focus:bg-slate-800"
             ref={provided.innerRef}
+            onClick={(event) => {
+              // we cannot call stopPropagation in Popover.Button so we have to skip it here
+              if (
+                !(
+                  event.target instanceof SVGElement ||
+                  event.target instanceof HTMLButtonElement
+                )
+              ) {
+                setIsDialogOpen(true);
+              }
+            }}
             {...provided.draggableProps}
-            {...provided.dragHandleProps}
           >
             <div className="text-xl md:text-2xl text-right text-slate-300 tracking-wider order-1 max-w-fit">
               {index + 1}
@@ -52,12 +62,14 @@ export const CollectionItem: React.FC<{
             <div className="flex flex-row space-x-2 order-4 max-w-fit justify-self-end">
               <Button
                 size="sm"
-                onClick={() => {
-                  setIsDialogOpen(true);
+                onClick={(event) => {
+                  event.stopPropagation();
                 }}
-                className="hover:bg-yellow-900"
+                className="hover:bg-yellow-900 cursor-grab"
+                {...provided.dragHandleProps}
               >
-                <MdEdit className="w-8 h-8" />
+                {/* <MdEdit className="w-8 h-8" /> */}
+                <MdSwapVert className="w-8 h-8" />
               </Button>
 
               <RemoveButton onRemove={onRemove} className="hover:bg-red-900" />
@@ -66,14 +78,15 @@ export const CollectionItem: React.FC<{
         )}
       </Draggable>
       <EditDialog
-        collection={collection}
+        mediaUri={collection.mediaUri}
+        item={collection}
         isDialogOpen={isDialogOpen}
         onClose={() => {
           setIsDialogOpen(false);
         }}
         onUpdate={(updatedCollection) => {
           setIsDialogOpen(false);
-          onUpdate(updatedCollection);
+          onUpdate({ ...collection, ...updatedCollection });
         }}
       />
     </>
