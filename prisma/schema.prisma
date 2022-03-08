@@ -25,3 +25,11 @@ model Collection {
   imageUrl String?
   index    Int
 }
+
+model Artist {
+  mediaUri String  @id
+  type     String
+  name     String
+  imageUrl String?
+  index    Int
+}

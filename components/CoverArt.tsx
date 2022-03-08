@@ -1,7 +1,9 @@
+import classNames from "classnames";
 import * as React from "react";
 
 export const useCoverArtStyles = (
-  size: React.ComponentProps<typeof CoverArt>["size"]
+  size: React.ComponentProps<typeof CoverArt>["size"],
+  className?: string
 ) => {
   let sizeInPx = 320;
   switch (size) {
@@ -25,9 +27,12 @@ export const useCoverArtStyles = (
         maxHeight: sizeInPx,
         maxWidth: sizeInPx,
       },
-      className: "rounded-lg border border-slate-900 shadow-lg object-cover",
+      className: classNames(
+        "rounded-lg border border-slate-900 shadow-lg object-cover",
+        className
+      ),
     }),
-    [sizeInPx]
+    [sizeInPx, className]
   );
 };
 
@@ -39,6 +44,7 @@ export const CoverArt: React.FC<{
   progress?: number;
   showOriginal?: boolean;
   noCache?: boolean;
+  className?: string;
 }> = ({
   mediaUri,
   alt,
@@ -47,8 +53,9 @@ export const CoverArt: React.FC<{
   onClick,
   showOriginal = false,
   noCache = false,
+  className: additionalClassName,
 }) => {
-  const { style, className } = useCoverArtStyles(size);
+  const { style, className } = useCoverArtStyles(size, additionalClassName);
 
   return (
     <div className="relative">

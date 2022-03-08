@@ -34,6 +34,13 @@ export const getPlaylistInfo = async (id: string) => {
   return playlistResponse.body;
 };
 
+export const getArtistInfo = async (id: string) => {
+  await updateAccessToken();
+
+  const artistResponse = await spotifyApi.getArtist(id);
+  return artistResponse.body;
+};
+
 export const getTrackListForPlaylist = async (spotifyPlaylistId: string) => {
   await updateAccessToken();
 

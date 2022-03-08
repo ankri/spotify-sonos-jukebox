@@ -1,3 +1,4 @@
+import { Artist } from "@custom-types/Artist";
 import { Collection, CollectionTypes } from "@custom-types/Collection";
 import { Track } from "@custom-types/Track";
 import { prisma } from "./prisma";
@@ -42,10 +43,32 @@ export const getAllAudiobooks = (): Promise<Collection[]> => {
   });
 };
 
-export const getAllStories = (): Promise<Collection[]> => {
+export const getAllStories = (artist?: string): Promise<Collection[]> => {
   return prisma.collection.findMany({
     where: {
       type: CollectionTypes.story,
+      artist,
+    },
+    orderBy: {
+      index: "asc",
+    },
+  });
+};
+
+export const getArtistInfo = (mediaUri: string): Promise<Artist | null> => {
+  return prisma.artist.findUnique({
+    where: {
+      mediaUri,
+    },
+  });
+};
+
+export const getArtists = (
+  collectionType: keyof typeof CollectionTypes
+): Promise<Artist[]> => {
+  return prisma.artist.findMany({
+    where: {
+      type: collectionType,
     },
     orderBy: {
       index: "asc",

@@ -52,3 +52,6 @@ export const mergeTracks = (
     };
   });
 };
+
+export const getArtistIdFromSpotifyArtistId = (spotifyArtistUri: string) =>
+  spotifyArtistUri.replace("spotify:artist:", "");

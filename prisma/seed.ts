@@ -1,3 +1,4 @@
+import artists from "../database/database/artists.json";
 import audiobooks from "../database/database/audiobooks.json";
 import music from "../database/database/music.json";
 import stories from "../database/database/stories.json";
@@ -8,6 +9,26 @@ import { CollectionTypes } from "../types/Collection";
 const prisma = new PrismaClient();
 
 async function main() {
+  console.log("seeding artists");
+  let artistsIndex = 0;
+  for (const artist of artists) {
+    await prisma.artist.upsert({
+      where: {
+        mediaUri: artist.mediaUri,
+      },
+      create: {
+        ...artist,
+        index: artistsIndex,
+      },
+      update: {
+        ...artist,
+        index: artistsIndex,
+      },
+    });
+
+    artistsIndex++;
+  }
+
   console.log("seeding audiobooks");
   let audiobookIndex = 0;
   for (const audiobook of audiobooks) {

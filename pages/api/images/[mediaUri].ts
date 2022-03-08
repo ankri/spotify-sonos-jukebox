@@ -62,6 +62,17 @@ export default async function handler(
             imageUrl = playlistInfo.images[0]?.url ?? undefined;
           }
           break;
+        case "artist": {
+          const artistInfo = await Database.getArtistInfo(mediaUri);
+
+          if (artistInfo && artistInfo.imageUrl) {
+            imageUrl = artistInfo.imageUrl;
+          } else {
+            const artistInfo = await SpotifyApi.getArtistInfo(id);
+            imageUrl = artistInfo.images[0]?.url ?? undefined;
+          }
+          break;
+        }
         default:
           imageUrl = undefined;
       }

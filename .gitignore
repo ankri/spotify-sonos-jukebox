@@ -41,6 +41,7 @@ yarn-error.log*
 # config and database files
 config/config.ts
 config/config.json
+database/database/artists.json
 database/database/music.json
 database/database/audiobooks.json
 database/database/stories.json
