@@ -9,10 +9,10 @@ export const PageLayout: React.FC<{
       className="flex flex-col justify-between"
       style={{ height: "calc(100vh - 72px)" }}
     >
-      <div className="w-full flex flex-grow items-center px-4 py-2">
+      <div className="w-full flex flex-grow items-center px-4 py-1">
         {children}
       </div>
-      <div className="flex flex-col md:flex-row items-center justify-center md:justify-between p-2 space-y-4">
+      <div className="flex flex-col md:flex-row items-center justify-center md:justify-between p-2 space-y-2">
         {leftControls}
         <div className="flex items-center justify-center">{rightControls}</div>
       </div>

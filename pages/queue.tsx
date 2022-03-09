@@ -83,7 +83,7 @@ const QueuePage: NextPage<{
               {queue.map((track, index) => {
                 return (
                   <SwiperSlide key={track.uri}>
-                    <div className="flex flex-col items-center space-y-4">
+                    <div className="flex flex-col items-center space-y-2">
                       <div className="relative">
                         <CoverArt
                           alt={track.title}
@@ -128,7 +128,7 @@ const QueuePage: NextPage<{
                         ) : null}
                       </div>
                       <TextToSpeechHeading
-                        className="text-lg text-center line-clamp-2"
+                        className="text-xl text-center line-clamp-3 font-medium"
                         text={track.title}
                       />
                     </div>

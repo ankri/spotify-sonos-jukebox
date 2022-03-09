@@ -38,7 +38,7 @@ const StoriesHomepage: NextPage<{
             {artists.map((artist) => {
               return (
                 <SwiperSlide key={artist.mediaUri}>
-                  <div className="flex flex-col items-center space-y-4">
+                  <div className="flex flex-col items-center space-y-2">
                     <CoverArt
                       className="!rounded-full border-2 border-black cursor-pointer"
                       alt={artist.name}
@@ -49,7 +49,7 @@ const StoriesHomepage: NextPage<{
                       }}
                     />
                     <TextToSpeechHeading
-                      className="text-lg text-center line-clamp-2"
+                      className="text-xl text-center line-clamp-3 font-medium"
                       text={artist.name}
                     />
                   </div>

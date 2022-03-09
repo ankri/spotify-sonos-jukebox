@@ -45,7 +45,7 @@ export const ArtistHomepageLayout: React.FC<{
             {collections.map((collection) => {
               return (
                 <SwiperSlide key={collection.mediaUri}>
-                  <div className="flex flex-col items-center space-y-4">
+                  <div className="flex flex-col items-center space-y-2">
                     <CoverArt
                       alt={collection.name}
                       mediaUri={collection.mediaUri}
@@ -55,7 +55,7 @@ export const ArtistHomepageLayout: React.FC<{
                       }}
                     />
                     <TextToSpeechHeading
-                      className="text-lg text-center line-clamp-2"
+                      className="text-xl text-center line-clamp-3 font-medium"
                       text={collection.name}
                     />
                   </div>

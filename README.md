@@ -17,3 +17,7 @@ max_framebuffers=2
 lcd_rotate=2
 
 https://www.stoffl.info/2020/03/25/how-to-raspberry-pi-chromium-kiosk-mode-autostart-und-vollbildmodus/
+
+# PM2
+
+pm2 start npm --name "jukebox" -- start
