@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { CoverArt } from "./CoverArt";
 import { TextToSpeechHeading } from "./TextToSpeechHeading";
 import { useRouter } from "next/router";
-import { config } from "@config/config";
 
 interface Track {
   id: string;
@@ -59,7 +58,7 @@ export const CollectionSwiper: React.FC<{
                       await fetch(`/api/album/${albumId}/track/${index + 1}`);
                     }
 
-                    Router.push(`/${config.ui.defaultPlayer}`);
+                    Router.push(`/player`);
                   }}
                 />
                 <TextToSpeechHeading

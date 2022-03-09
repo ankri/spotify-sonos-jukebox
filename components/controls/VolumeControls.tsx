@@ -5,12 +5,12 @@ import {
   MdSignalCellular3Bar,
   MdSignalCellular4Bar,
 } from "react-icons/md";
-import { config } from "@config/config";
+import { Config } from "@custom-types/Config";
 import { Button } from "../Button";
 
 export const VolumeControls: React.FC = () => {
   const setVolume = React.useCallback(
-    async (volumePreset: keyof typeof config.volumes) => {
+    async (volumePreset: keyof Config["volumes"]) => {
       return fetch(`/api/playback/volume/${volumePreset}`);
     },
     []

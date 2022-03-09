@@ -1,13 +1,12 @@
 import * as React from "react";
 import classNames from "classnames";
-import { Dialog, Menu, Transition } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 
-import { FaHome, FaInbox, FaBars } from "react-icons/fa";
+import { FaHome, FaBars } from "react-icons/fa";
 import {
   MdClose,
   MdOutlineMenuBook,
   MdOutlinePlayArrow,
-  MdPlaylistPlay,
   MdQueueMusic,
   MdSchool,
 } from "react-icons/md";
@@ -15,7 +14,6 @@ import { CurrentlyPlaying } from "@components/CurrentlyPlaying";
 import { MiniControls } from "@components/controls/MiniControls";
 import { BsMusicNoteBeamed } from "react-icons/bs";
 import { useRouter } from "next/router";
-import { config } from "@config/config";
 
 const adminNavigation = [
   {
@@ -40,7 +38,7 @@ const playerNavigation = [
   { name: "Home", href: `/`, icon: FaHome },
   {
     name: "Player",
-    href: `/${config.ui.defaultPlayer}`,
+    href: `/player`,
     icon: MdOutlinePlayArrow,
   },
 ];

@@ -3,9 +3,6 @@ export interface Config {
     url: string;
     room: string;
   };
-  ui: {
-    defaultPlayer: "player" | "queue";
-  };
   spotify: {
     clientId: string;
     clientSecret: string;

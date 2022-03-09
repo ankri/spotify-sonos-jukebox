@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import * as Converter from "@spotify/converter";
 import React from "react";
-import { config } from "@config/config";
 
 export const usePlayCollection = () => {
   const Router = useRouter();
@@ -17,7 +16,7 @@ export const usePlayCollection = () => {
         } else {
           const albumId = Converter.getAlbumIdFromSpotifyUri(mediaUri);
           await fetch(`/api/album/${albumId}/track/1`);
-          Router.push(`/${config.ui.defaultPlayer}`);
+          Router.push(`/player`);
         }
       } else if (mediaUri.includes(":playlist:")) {
         if (path === "/music") {
@@ -29,7 +28,7 @@ export const usePlayCollection = () => {
         } else {
           const playlistId = Converter.getPlaylistIdFromSpotifyUri(mediaUri);
           await fetch(`/api/playlist/${playlistId}/track/1`);
-          Router.push(`/${config.ui.defaultPlayer}`);
+          Router.push(`/player`);
         }
       }
     },

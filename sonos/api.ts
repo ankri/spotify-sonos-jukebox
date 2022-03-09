@@ -1,6 +1,7 @@
-import { config } from "@config/config";
+import { getConfig } from "@config/config";
 import * as Converter from "@spotify/converter";
 import { SimpleSonosTrack, SonosState } from "@custom-types/Sonos";
+import { Config } from "@custom-types/Config";
 
 export type AvailableCommands = "play" | "pause" | "next" | "previous";
 export const availableCommands: Set<AvailableCommands> = new Set();
@@ -15,6 +16,8 @@ export const sendCommand = async (
   if (!availableCommands.has(command)) {
     throw new Error(`Invalid command: ${command}`);
   } else {
+    const config = await getConfig();
+
     const response = await fetch(
       `${config.api.url}/${config.api.room}/${command}`
     );
@@ -29,7 +32,7 @@ export const sendCommand = async (
   }
 };
 
-export type AvailableVolumePresets = keyof typeof config.volumes;
+export type AvailableVolumePresets = keyof Config["volumes"];
 export const availableVolumePresets: Set<AvailableVolumePresets> = new Set();
 availableVolumePresets.add("preset-0");
 availableVolumePresets.add("preset-1");
@@ -40,6 +43,8 @@ availableVolumePresets.add("preset-4");
 export const setVolume = async (
   volumePreset: AvailableVolumePresets
 ): Promise<void> => {
+  const config = await getConfig();
+
   // only allow positive (incl. 0 but wwyd that?) integers
   let volume = Math.floor(Math.abs(config.volumes[volumePreset])) ?? 25;
   if (volume > 100) {
@@ -61,6 +66,7 @@ export const setVolume = async (
 };
 
 export const playAlbum = async (albumId: string, trackNumber?: string) => {
+  const config = await getConfig();
   const albumUri = Converter.getSpotifyAlbumUriFromAlbumId(albumId);
 
   console.log(`playing album: ${albumUri} track #${trackNumber}`);
@@ -80,6 +86,7 @@ export const playPlaylist = async (
   playlistId: string,
   trackNumber?: string
 ) => {
+  const config = await getConfig();
   const playlistUri = Converter.getSpotifyPlaylistUriFromPlaylistId(playlistId);
 
   console.log(`playing playlist: ${playlistUri} ${trackNumber}`);
@@ -96,10 +103,12 @@ export const playPlaylist = async (
 };
 
 export const playTrack = async (trackNumber: number) => {
+  const config = await getConfig();
   await fetch(`${config.api.url}/${config.api.room}/trackseek/${trackNumber}`);
 };
 
 export const getState = async (): Promise<SonosState> => {
+  const config = await getConfig();
   const response = await fetch(`${config.api.url}/${config.api.room}/state`);
   const data: SonosState = await response.json();
 
@@ -123,12 +132,16 @@ export const getState = async (): Promise<SonosState> => {
 };
 
 export const textToSpeech = async (text: string): Promise<void> => {
+  const config = await getConfig();
+
   await fetch(
     `${config.api.url}/${config.api.room}/say/${text}/${config.tts.locale}/${config.volumes["preset-2"]}`
   );
 };
 
 export const getQueue = async (): Promise<SimpleSonosTrack[]> => {
+  const config = await getConfig();
+
   const response = await fetch(
     `${config.api.url}/${config.api.room}/queue/detailed`
   );
