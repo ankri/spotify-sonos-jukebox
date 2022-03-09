@@ -9,6 +9,7 @@ import {
   MdOutlinePlayArrow,
   MdQueueMusic,
   MdSchool,
+  MdSettings,
 } from "react-icons/md";
 import { CurrentlyPlaying } from "@components/CurrentlyPlaying";
 import { MiniControls } from "@components/controls/MiniControls";
@@ -32,6 +33,7 @@ const adminNavigation = [
     icon: MdOutlineMenuBook,
   },
   { name: "Tracks", href: "/admin/tracks", icon: MdQueueMusic },
+  { name: "Settings", href: "/admin/config", icon: MdSettings },
 ];
 
 const playerNavigation = [
