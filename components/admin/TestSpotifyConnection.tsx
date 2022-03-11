@@ -52,6 +52,7 @@ export const TestSpotifyConnection: React.FC<{}> = ({}) => {
               <a
                 href="https://github.com/ankri/spotify-sonos-jukebox"
                 target="_blank"
+                rel="noreferrer"
                 referrerPolicy="no-referrer"
               >
                 readme

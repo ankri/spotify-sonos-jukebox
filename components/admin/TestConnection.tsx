@@ -24,7 +24,7 @@ export const TestConnection: React.FC<{ url: string }> = ({ url }) => {
           setStatus("failed");
         });
     }
-  }, [url]);
+  }, [url, status]);
 
   if (status === "success") {
     return (
