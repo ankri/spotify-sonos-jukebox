@@ -24,7 +24,7 @@ export const TestConnection: React.FC<{ url: string }> = ({ url }) => {
           setStatus("failed");
         });
     }
-  }, [url, status]);
+  }, [url]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (status === "success") {
     return (
