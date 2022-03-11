@@ -1,18 +1,23 @@
 import { imageCache } from "@cache/cache";
+import { prisma } from "@database/prisma";
 import { NextApiHandler } from "next";
 
 const availableRoutes = ["music", "stories", "audiobooks"];
 
 const handler: NextApiHandler = async (req, res) => {
-  const route = req.query.route as string;
-
   try {
-    if (route && availableRoutes.includes(route)) {
+    for (const route of availableRoutes) {
       await res.unstable_revalidate(`/${route}`);
-    } else {
-      for (const route of availableRoutes) {
-        await res.unstable_revalidate(`/${route}`);
-      }
+    }
+
+    const storyArtists = await prisma.artist.findMany({
+      where: {
+        type: "story",
+      },
+    });
+
+    for (const artist of storyArtists) {
+      await res.unstable_revalidate(`/stories/artist/${artist.mediaUri}`);
     }
 
     // we also clear the image cache so we always show the correct images
