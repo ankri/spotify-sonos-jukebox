@@ -1,6 +1,6 @@
 import { Collection } from "@custom-types/Collection";
 import { CollectionHomepageLayout } from "@layouts/CollectionHomepageLayout";
-import { GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import * as React from "react";
 import * as Database from "@database/database";
 
@@ -12,7 +12,7 @@ const MusicHomepage: NextPage<{
 
 export default MusicHomepage;
 
-export const getStaticProps: GetStaticProps = async ({}) => {
+export const getServerSideProps: GetServerSideProps = async ({}) => {
   const audiobooks = await Database.getAllAudiobooks();
 
   return {

@@ -1,7 +1,6 @@
-import { GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import * as React from "react";
 import * as Database from "@database/database";
-import * as Converter from "@spotify/converter";
 import { RootLayout } from "@layouts/RootLayout";
 import { HomepageNavigation } from "@components/HomepageNavigation";
 import { PageLayout } from "@layouts/PageLayout";
@@ -65,7 +64,7 @@ const StoriesHomepage: NextPage<{
 
 export default StoriesHomepage;
 
-export const getStaticProps: GetStaticProps = async ({}) => {
+export const getServerSideProps: GetServerSideProps = async ({}) => {
   const artists = await Database.getArtists("story");
 
   return {
