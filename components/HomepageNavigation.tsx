@@ -35,6 +35,12 @@ export const HomepageNavigation: React.FC = ({}) => {
       >
         <MdOutlineMenuBook className="w-8 h-8 text-slate-300" />
       </LinkButton>
+      <button
+        className="w-14 h-14"
+        onClick={() => {
+          location.reload();
+        }}
+      ></button>
     </Navbar>
   );
 };
